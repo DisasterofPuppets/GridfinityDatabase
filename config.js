@@ -66,7 +66,8 @@ const disclaimer = `/*
 `;
 
 // Defines the uiCode constant 
-const uiCode = `// DOM element references
+const uiCode = `
+// DOM element references
 const searchBox = document.getElementById('search-box');
 const tableBody = document.getElementById('table-body');
 const grid = document.getElementById('grid');
@@ -77,7 +78,6 @@ let currentCaseData = cases[0]; // Default to first case
 // Sorting state tracking
 let currentSortColumn = null;
 let currentSortOrder = 'asc';
-
 
 // Core grid functions
 function highlightGrid(position, locations) {
@@ -119,7 +119,6 @@ function highlightGrid(position, locations) {
     });
 }
 
-
 // DataTable rendering and management functions
 function renderTable(data) {
     if (!tableBody) {
@@ -155,7 +154,6 @@ function resetTable() {
     gridTitle.textContent = '';
     imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Item Image" />';
 }
-
 // Layer key table
 function showLayers(layers = 2, position = 0) {
     const layerContainer = document.getElementById('layers');
@@ -209,7 +207,6 @@ function showLayers(layers = 2, position = 0) {
     table.appendChild(tbody);
     layerContainer.appendChild(table);
 }
-
 // Function to set the grid title
 function updateGridTitle(caseData, selected) {
     const gridTitle = document.getElementById('grid-title');
@@ -226,11 +223,9 @@ function updateGridTitle(caseData, selected) {
             \`<b>Location: </b> \${selected.Location}\`;
     }
 }
-
 updateGridTitle(); // This will display default text
 // This will show the empty table with no highlighted layers
 showLayers();
-
 
 // Function to update layers fill based on selection
 function updateLayerFill(selectedLayer) {
@@ -255,7 +250,6 @@ function updateLayerFill(selectedLayer) {
     });
 }
 
-
 //This one does some stuff
 document.addEventListener('DOMContentLoaded', () => {
     const padder = document.querySelector('.padder');
@@ -265,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Set default Part image on load
     if (imageContainer) {
-        imageContainer.innerHTML = '<img src="Part%20Images/default.png" alt="Default Image" style="max-width: 100%; height: auto;" />';
+        imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Default Image" style="max-width: 100%; height: auto;" />';
     }
     
     // Array of pattern images
@@ -274,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'Images/Pattern2.png',
         'Images/Pattern3.png'
     ];
-
     // Function to get random pattern that's different from the current one
     function getRandomPattern() {
         const currentPattern = localStorage.getItem('currentPattern');
@@ -287,8 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         return availablePatterns[Math.floor(Math.random() * availablePatterns.length)];
     }
-    
-
 
     // Check localStorage for saved preference and pattern
     const backgroundEnabled = localStorage.getItem('backgroundEnabled') === 'true';
@@ -313,11 +304,10 @@ document.addEventListener('DOMContentLoaded', () => {
     configLink.addEventListener('click', (e) => {
         localStorage.setItem('backgroundEnabled', body.classList.contains('background-enabled'));
         if (body.style.backgroundImage && body.style.backgroundImage !== 'none') {
-            localStorage.setItem('currentPattern', body.style.backgroundImage.replace(/url\(['"](.+)['"]\)/, '$1'));
+            localStorage.setItem('currentPattern', body.style.backgroundImage.replace(/url(['"](.+)['"])/, '$1'));
         }
     });
     
-
     padder.addEventListener('click', () => {
         // Toggle background state
         const isCurrentlyEnabled = body.classList.contains('background-enabled');
@@ -362,9 +352,6 @@ function selectRow(index, itemData) {
 }
 
 
-
-
-// Image handling function
 function displayImage(partName) {
     const imagePreview = document.getElementById('image-preview');
     if (!imagePreview) {
@@ -372,9 +359,8 @@ function displayImage(partName) {
     }
     // Clear existing content
     imagePreview.innerHTML = '';
-    // Clean up part name and create path
-    const cleanPartName = partName.replace(/[\s_]+/g, '');
-    
+    // Remove all spaces from the part name
+    const cleanPartName = partName.replace(/\s+/g, '');
     // Create and append image element
     const img = document.createElement('img');
     img.style.maxWidth = '100%';
@@ -383,7 +369,6 @@ function displayImage(partName) {
     // Handle image loading errors
     img.onerror = function() {
         img.src = 'Part Images/default.png';
-        
         // Handle default image error
         img.onerror = function() {
             imagePreview.innerHTML = \`<div style="color: red;">Image not available</div>\`;
@@ -391,7 +376,6 @@ function displayImage(partName) {
     };
     // Set initial image source
     img.src = \`Part Images/\${cleanPartName}.png\`;
-    
     imagePreview.appendChild(img);
 }
 
@@ -442,7 +426,6 @@ function generateGrid(caseData = cases[0]) {
     tbody.appendChild(table);
 }
 
-
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     if (database.length === 0) {
@@ -455,33 +438,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render the initial table
     renderTable(database);
     // Display default part image on load
-    imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Default Part Image" style="max-width: 100%; height: auto;" />';
+    imageContainer.innerHTML = '<img src="Part%20Images/default.png" alt="Default Part Image" style="max-width: 100%; height: auto;" />';
 });
-
 // Clear button functionality
 document.getElementById('clear-button').addEventListener('click', () => {
     document.getElementById('search-box').value = '';
     renderTable(database);
     generateGrid(cases[0]);  // Reset to default case
-    imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Item Image" />';
+    imageContainer.innerHTML = '<img src="Part%20Images/default.png" alt="Item Image" />';
     gridTitle.textContent = \`Case: \${cases[0].Case}\`;
 });
-
 
 // Search functionality
 searchBox.addEventListener('input', () => {
     const query = searchBox.value.trim().toLowerCase();
+    console.log('Search Query:', query);  // Debug the search input
+    
     const results = database.filter(item => 
         item.Case.toString().toLowerCase().includes(query) ||
-        item.Part.toLowerCase().includes(query) ||
-        item.Position.toLowerCase().includes(query) ||
-        item.Location.toLowerCase().includes(query)
+        (item.Part && item.Part.toLowerCase().includes(query)) ||  // Ensure item.Part is a string
+        (item.Position && item.Position.toString().includes(query)) ||  // Convert Position to string for comparison
+        (item.Location && item.Location.toLowerCase().includes(query))  // Ensure item.Location is a string
     );
-    renderTable(results);
-    generateGrid(cases[0]);
-    gridTitle.textContent = '';
+    
+    console.log('Search Results:', results);  // Debug the filtered results
+    renderTable(results);  // Render filtered results
+    generateGrid(cases[0]); // Regenerate the grid for the default case
+    gridTitle.textContent = ''; // Clear the grid title
 });
-
 
 // Sorting functionality
 document.querySelectorAll('th').forEach((header, index) => {
@@ -505,7 +489,6 @@ document.querySelectorAll('th').forEach((header, index) => {
         renderTable(sortedData);
     });
 });
-
 
 // Responsive layout handling
 window.addEventListener('resize', () => {
