@@ -1,0 +1,581 @@
+/* 
+Gridfinity created by: Zack Freedman 
+https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman
+
+Gridfinity Database by: Disaster of Puppets 2025 
+http://disasterofpuppets.com 
+
+This code is free to use and modify, provided attribution is maintained.
+By using this code, you agree that:
+1. You will maintain attribution to original authors
+2. You accept all responsibility for any issues or damage that may arise from its use
+3. The authors accept no liability for any consequences of using this code
+
+Use at your own risk.
+
+Now that's out of the way, Enjoy!
+*/
+
+
+
+
+body, html {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	background-color: white; /* Fallback color */
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+}
+
+	body.background-enabled {
+		background-image: url('Images/Pattern1.png');
+		background-size: 300px 300px;
+		background-repeat: repeat;
+		background-position: center;
+		background-attachment: fixed;
+	}
+
+/* Header styling */
+header {
+	height: 40px;
+	display: flex;
+	position: fixed; /* Fix header at the top */
+	background-color: #333;
+	color: white;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 16px;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+	box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+}
+
+		.maintitle {
+			flex-grow: 1;                          /* Determines how much space element can grow */
+			text-align: center;                    /* Aligns text within element */
+		}
+
+
+		.index {
+			text-align: right;
+			padding-right: 10px;
+			display: flex;
+			align-items: center;
+			height: 100%;
+		}
+		
+		.index a {
+			display: block;
+			width: 24px;  /* Adjust size as needed */
+			height: 24px; /* Adjust size as needed */
+			background-image: url('Images/Home.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			transition: all 0.2s ease;
+		}
+		
+		.index a:hover {
+			background-image: url('Images/Home-Hover.png');
+		}
+
+		.padder {
+			width: 5px;  /* Adjust size as needed */
+			background-color: #333;
+			height: 40px;
+		}
+
+		.padder a {
+			transition: all 0.2s ease;
+			background-color: #4e4d4d;
+		}
+
+		.padder:hover {
+			width: 5px;  /* Adjust size as needed */
+			background-color: #4e4d4d;
+			height: 40px;
+		}
+		
+/* Footer styling */
+		footer {
+			height: 40px;
+			background-color: #333;
+			color: white;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			justify-content: center;
+			font-size: 10px;
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+			text-align: center;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+			font-family: Arial, sans-serif;
+			}
+
+		footer a {
+			color: #4da8da;
+			text-decoration: none;
+		}
+
+		footer a:hover {
+			text-decoration: underline;
+		}
+
+
+/* Main content layout */
+		.content {
+			display: flex; 						   /* Flexbox layout */
+			align-items: center; 				   /* Aligns flex items on cross axis */
+			justify-content: center; 			   /* Centers flex items on main axis */
+			box-sizing: border-box; 			   /* Ensure padding and borders are included in the width */
+			overflow: hidden;                      /* Controls how content overflows container */
+			gap: 0;                                /* Sets space between flex items */
+	
+		}
+
+/* Left column styling */
+		.left-column {
+			display: flex;
+			flex: 1;                               /* Shorthand for flex-grow, flex-shrink, and flex-basis */
+			flex-direction: column;
+			height: calc(100vh - 40px);            /* Calculates height dynamically */
+			box-sizing: border-box;
+			align-items: center;
+			text-align: center;
+			justify-content: center;
+			width: auto;                           /* Allows width to be determined by content */
+			padding-top: 50px;                     /* Sets padding at top of element */
+		}	
+
+/* Right column styling */
+		.right-column {
+			display: flex;
+			flex: 1;
+			flex-direction: column;
+			box-sizing: border-box;
+			align-items: center;
+			text-align: center;
+			justify-content: center;
+			width: auto;
+			max-width: 70vw;                       /* Sets maximum width relative to viewport */
+			padding-top: 50px;
+			height: calc(100vh - 40px);            /* Calculates height dynamically */
+		}
+
+/* Case container styles */
+		.case-container-wrapper {
+			overflow-y: auto;                      /* Controls vertical scrolling */
+			max-width: 70vw;
+			justify-content: center;               /* center Horizontally */
+			padding: 10px;
+		}	
+
+/* Table styling */
+        /* Remove background and border from the top row headers (starting from "B") */
+        .right-column table tr th:nth-child(n+2) {
+            background: none;                      /* Removes background styling */
+            border: none;                          /* Removes border styling */
+        }
+
+        /* Remove hover effect from the top row (starting from "B") and left column */
+        .right-column table tr th:nth-child(n+2):hover, /* Top row starting from "B" */
+        .right-column table tr th:first-child:hover { /* Left column */
+            background-color: transparent;         /* Makes background see-through */
+            cursor: default;                       /* Sets mouse cursor style */
+        }
+
+        .right-column table, .left-column table td {
+            padding: 6px;
+            text-align: center;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+        }
+
+/* Cell states */
+        .right-column table td.default {
+            background-color: white;
+        }
+
+        .right-column table td.top {
+            background-color: yellow;
+        }
+
+        .right-column table td.bottom {
+            background-color: red;
+        }
+
+        .right-column td {
+            width: 35px !important;                /* Forces width with highest priority */
+            height: 35px !important;
+            text-align: center;
+            vertical-align: center;                /* Aligns content vertically in cell */
+            border: 1px solid #000;             /* Sets border width, style, and color */
+            box-sizing: border-box;
+        }
+
+/* Case container layout */
+		#casecontainer{
+			display: flex;
+			flex-wrap: wrap;                      /* Allows flex items to wrap to new line */
+			box-sizing: border-box;
+			align-content: center;                /* Aligns wrapped content */
+			justify-content: center;              /* center Horizontally */
+			text-align: center;
+			max-width: 70vw;
+			gap: 20px;
+		}
+		
+		
+       /* Form styling */
+		.form {
+			display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+			gap: 0;
+			height: auto;                        /* Allows height to adjust to content */
+	   }
+		
+        #fileInput {
+            display: none;
+        }
+		
+		.input {
+			display: flex;
+			flex-direction: row;  				/* Change to row to keep items on same line */
+			align-items: center;  				/* Vertically center items */
+			gap: 5px;  							/* Add horizontal space between button and filename */
+		}
+		
+/* Convert button container */
+		.convert-button { 
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			margin: 0;
+			padding: 10px;
+			box-sizing: border-box;
+			height: auto;
+		}
+		
+/* Code preview section */
+
+
+
+		/* Initially hide the preview */
+		#preview {
+			white-space: nowrap;                 /* Prevents text from wrapping */
+			display: none; 						 /* Start with the preview hidden */
+			background-color: #f7f7f7; 		/* Light background for visibility */
+			padding: 10px;
+			text-align: left;
+			box-sizing: border-box;
+			overflow-x: auto;                    /* Controls horizontal scrolling */
+			overflow-y: auto;                    /* Allow vertical scrolling if needed */
+			width: auto;						 /* Ensure it takes the full width of the container */
+			height: auto; 						 /* Adjust height based on content */
+			flex-grow: 1; 						 /* Allow the container to grow */
+		}
+/*END CODE PREVIEW*/		
+
+		convertButton {
+            border-radius: 5px;                  /* Rounds corners of element */
+            background: linear-gradient(to top, rgb(207, 207, 207) 16%, rgb(252, 252, 252) 79%);  /* Creates gradient background */
+            padding: 10px;
+            border: 1px solid #000;
+            color: black;
+            text-decoration: none;
+            cursor: pointer;                    /* Changes mouse cursor on hover */
+        }
+		convertButton:hover {
+            background-color: #e6e6e6;
+        }
+		convertButton:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+		
+        #output {
+            display: none;
+            white-space: pre;                   /* Preserves whitespace and line breaks */
+            overflow-x: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-top: 10px;
+            max-width: 100%;
+			max-height: 200px;
+        }
+
+        #fileName {
+            font-size: 14px;
+            color: orange;
+            line-height: 1;                     /* Sets line height */
+            display: none;
+        }
+        h1 {
+            text-align: center;
+        }
+
+/* OK link styles */
+		#okLink {
+			display: none; 						/* Hidden initially */
+			color: blue;
+			cursor: pointer;
+			margin-top: 10px;
+			align-items: center; 				/* Center the content horizontally */
+		}
+
+		#okLink:hover {
+			text-decoration: underline;
+		}
+		
+		.excellent {
+		padding: 10px; 
+		background-color: #dff0d8; 
+		color: #3c763d; 
+		margin-bottom: 20px;
+		text-align: center;
+		}
+
+		.savebuttonwrapper {
+
+		margin-top: 20px;
+		text-align: center;
+		}
+		
+		save {
+            border-radius: 5px;
+            background: linear-gradient(to top, rgb(207, 207, 207) 16%, rgb(252, 252, 252) 79%);
+            border: 1px solid #000;
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+			display: none;
+        }
+		save:hover {
+            background-color: #e6e6e6;
+        }
+		
+		.formwrapper {
+		display: flex;
+		flex-direction: column;
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: auto;
+		
+		}
+		
+        #exampleLinks {
+ 			display:flex;
+			height: 60px;
+			gap: 2px;
+			align-items: center;
+			justify-content: flex-end;
+			box-sizing: border-box;
+			flex-direction: column;
+        }
+		
+        #errorMessage {
+			display: none;
+            color: red;
+            margin: 10px 0;
+			width: 100%;
+			text-align: center;
+			position: relative;
+        }
+		
+		#everythingok {
+			display: flex;
+			flex-direction: column;
+			align-items: center; 				/* Horizontally centers items inside #everythingok */
+			width: 100%; 						/* Ensures it takes up the full width of its parent */
+			margin: 0 auto; 					/* Centers #everythingok itself within its parent horizontally */
+			text-align: center; 				/* Ensures text inside is centered */
+			box-sizing: border-box;
+			padding: 0px;
+		}
+		
+
+/* Utility classes */
+	/* Remove the spinner from number inputs */
+		input[type="number"]::-webkit-outer-spin-button,
+		input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;              /* Removes default browser styling */
+		margin: 0;
+	}
+
+	.hidden {
+		display: none !important;
+	}
+
+	.button-disabled {
+		background-color: #d3d3d3 !important;
+		cursor: not-allowed !important;
+	}
+
+/* Case section */
+	caseSection {
+		display:flex;
+		flex-direction: column;
+		border-bottom: 10px;
+		box-sizing: border-box;
+		align-items: center;	
+		justify-content: center;
+		border-bottom: 1px solid #ccc;
+		margin-bottom: 20px;
+	}
+	
+	input[type="number"] {
+		-moz-appearance: textfield;           /* Removes default Firefox styling */
+		appearance: none;                     /* Removes default styling */
+		width: 4ch;                           /* Sets width based on character width */
+	}
+
+/* Button positioning */
+#convertButton {
+    margin: 0 auto;
+    display: none;
+}
+
+#fileName {
+    margin: 0;  						     /* Remove vertical margins */
+    display: inline-block;                   /* Makes element inline but with block properties */
+}
+
+#uploadFileButton {
+/* Ensure button stays centered */
+    margin: 0 auto;
+    display: block;                          /* Makes element a block-level element */
+}
+
+/* Empty element handling */
+.form > div:empty {
+    display: none;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.form > div.hidden,
+.form > div[style*="display: none"] {
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* grid styles */
+
+.grid {
+    display: grid;
+}
+
+.header-cell {
+    width: 15px;
+    height: 15px;
+    padding: 6px;
+    margin: 0;
+    border: 1px solid #ddd;
+    font-weight: bold;
+    color: #333;
+    background: #f5f5f5;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.header-cell-top {
+    width: 15px;
+    height: 15px;
+    padding: 6px;
+    margin: 0;
+    border: none;
+    font-weight: bold;
+    color: #333;
+    background: none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.header-cell-left {
+    width: 15px;
+    height: 15px;
+    padding: 6px;
+    margin: 0;
+    border: none;
+    font-weight: bold;
+    color: #333;
+    background: none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.header-cell-empty {
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+}
+
+.grid-cell {
+    border: 1px solid #ccc;
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+.grid-cell-light {
+    background: #fff;
+}
+
+.grid-cell-dark {
+    background: #f5f5f5;
+}
+.grid-container .grid th {
+    
+	padding: 0;
+    font-size: 8px;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    width: 15px;
+    margin: 0;
+}
+
+.grid-container .grid th.header-cell-top {
+    vertical-align: bottom;
+    height: 12px;
+}
+
+.grid-container .grid th.header-cell-left {
+    padding: 0;
+    text-align: center;
+}
+
+.grid-container-wrapper {
+    display: flex;
+	flex-direction: column;
+	align-items: center;
+    flex-wrap: wrap;
+}
+
+.grid-container {
+    margin: 10px;
+}
