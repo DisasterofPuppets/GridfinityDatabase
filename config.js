@@ -176,6 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+
+
+
 function showRenameNotice() {
     const notice = document.createElement('div');
     notice.style.position = 'fixed';
@@ -454,6 +457,11 @@ const debouncedGenerateTable = debounce(() => {
 
 
 
+
+
+
+
+
 // Update the generateCaseInputSection function to add input event listeners
 function generateCaseInputSection(casesData = null) {
     const uniqueCasesContainer = document.getElementById('uniqueCasesContainer');
@@ -636,7 +644,19 @@ okLink.addEventListener('click', () => {
     }
 });
 
-// Generate and display a separate table for each case name
+
+
+
+
+function getColumnLabel(index) {
+    let label = "";
+    while (index >= 0) {
+        label = String.fromCharCode(65 + (index % 26)) + label;
+        index = Math.floor(index / 26) - 1;
+    }
+    return label;
+}
+
 function generateTableFromInputs() {
     const caseContainer = document.getElementById('casecontainer');
     caseContainer.innerHTML = '';
@@ -668,7 +688,7 @@ function generateTableFromInputs() {
                 if (i === 0) {
                     cell.className = 'header-cell-empty';
                 } else {
-                    cell.textContent = String.fromCharCode(64 + i);
+                    cell.textContent = getColumnLabel(i - 1);
                     cell.className = 'header-cell-top';
                 }
                 grid.appendChild(cell);
@@ -699,6 +719,7 @@ function generateTableFromInputs() {
         }
     });
 }
+
 
 
 

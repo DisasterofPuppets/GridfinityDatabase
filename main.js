@@ -107,6 +107,8 @@ function resetTable() {
     imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Item Image" />';
 }
 
+
+
 // Layer key table
 function showLayers(layers = 2, position = 0) {
     const layerContainer = document.getElementById('layers');
@@ -213,12 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
     const configLink = document.querySelector('.config a');
     const imageContainer = document.getElementById('image-preview');
-    
-    // Set default Part image on load
+
     if (imageContainer) {
         imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Default Image" style="max-width: 100%; height: auto;" />';
     }
-    
+
     // Array of pattern images
     const patterns = [
         'Images/Pattern1.png',
@@ -226,71 +227,60 @@ document.addEventListener('DOMContentLoaded', () => {
         'Images/Pattern3.png'
     ];
 
-    // Function to get random pattern that's different from the current one
     function getRandomPattern() {
         const currentPattern = localStorage.getItem('currentPattern');
         let availablePatterns = patterns.filter(pattern => pattern !== currentPattern);
-        
-        // If somehow all patterns were filtered out (shouldn't happen with our logic)
+
         if (availablePatterns.length === 0) {
             availablePatterns = patterns;
         }
-        
+
         return availablePatterns[Math.floor(Math.random() * availablePatterns.length)];
     }
-    
 
+    // Load stored background preference
+    let backgroundEnabled = localStorage.getItem('backgroundEnabled') === 'true';
+    let currentPattern = localStorage.getItem('currentPattern');
 
-    // Check localStorage for saved preference and pattern
-    const backgroundEnabled = localStorage.getItem('backgroundEnabled') === 'true';
-    const currentPattern = localStorage.getItem('currentPattern');
-    
-    if (backgroundEnabled) {
+    if (backgroundEnabled && currentPattern) {
         body.classList.add('background-enabled');
         padder.classList.add('active');
-        if (currentPattern) {
-            body.style.backgroundImage = `url('${currentPattern}')`;
-        }
+        body.style.backgroundImage = `url('${currentPattern}')`;
     } else {
         body.style.backgroundImage = 'none';
     }
-    
-    
-    
-    
-    
-    
-    // Update config link click handler
-    configLink.addEventListener('click', (e) => {
+
+    // Ensure the current pattern is saved before switching pages
+    configLink.addEventListener('click', () => {
         localStorage.setItem('backgroundEnabled', body.classList.contains('background-enabled'));
-        if (body.style.backgroundImage && body.style.backgroundImage !== 'none') {
-            localStorage.setItem('currentPattern', body.style.backgroundImage.replace(/url(['"](.+)['"])/, '$1'));
-        }
+        localStorage.setItem('currentPattern', currentPattern || '');
     });
-    
 
     padder.addEventListener('click', () => {
-        // Toggle background state
-        const isCurrentlyEnabled = body.classList.contains('background-enabled');
-        
+        let isCurrentlyEnabled = body.classList.contains('background-enabled');
+
         if (isCurrentlyEnabled) {
-            // Turn off background
             body.classList.remove('background-enabled');
             padder.classList.remove('active');
             body.style.backgroundImage = 'none';
+            currentPattern = '';
         } else {
-            // Turn on background with random pattern (different from last used)
             body.classList.add('background-enabled');
             padder.classList.add('active');
-            const randomPattern = getRandomPattern();
-            body.style.backgroundImage = `url('${randomPattern}')`;
-            localStorage.setItem('currentPattern', randomPattern);
+            currentPattern = getRandomPattern();
+            body.style.backgroundImage = `url('${currentPattern}')`;
         }
-        
-        // Save preference
+
         localStorage.setItem('backgroundEnabled', !isCurrentlyEnabled);
+        localStorage.setItem('currentPattern', currentPattern);
     });
 });
+
+
+
+
+
+
 // Data-Table row selection
 function selectRow(index, itemData) {
     const selected = itemData || database[index];
@@ -298,7 +288,7 @@ function selectRow(index, itemData) {
     const caseData = cases.find(c => c.Case === selected.Case) || cases[0];
     // Regenerate grid with selected case dimensions
     generateGrid(caseData);
-    console.log('Highlighting:', selected.Position, selected.Location);
+    /*console.log('Highlighting:', selected.Position, selected.Location);*/
     highlightGrid(selected.Position, selected.Location); // Pass position value
     // Update UI: Remove selection from all rows, add to the clicked row
     document.querySelectorAll('#table-body tr').forEach(row => row.classList.remove('selected'));
@@ -347,7 +337,14 @@ function displayImage(partName) {
 }
 
 
-
+function getColumnLabel(index) {
+    let label = "";
+    while (index >= 0) {
+        label = String.fromCharCode(65 + (index % 26)) + label;
+        index = Math.floor(index / 26) - 1;
+    }
+    return label;
+}
 
 // Grid generation function
 function generateGrid(caseData = cases[0]) {
@@ -366,7 +363,7 @@ function generateGrid(caseData = cases[0]) {
     // Add letter headers
     for (let i = 0; i < caseData.Width; i++) {
         const th = document.createElement('th');
-        th.textContent = String.fromCharCode(65 + i);
+        th.textContent = getColumnLabel(i); // Use new function for labels
         if (i % 2 === 1) th.classList.add('alternate'); // Alternate columns
         headerRow.appendChild(th);
     }
@@ -394,6 +391,10 @@ function generateGrid(caseData = cases[0]) {
     
     tbody.appendChild(table);
 }
+
+
+
+
 
 
 // Event Listeners
@@ -424,45 +425,48 @@ document.getElementById('clear-button').addEventListener('click', () => {
 // Search functionality
 searchBox.addEventListener('input', () => {
     const query = searchBox.value.trim().toLowerCase();
-    console.log('Search Query:', query);  // Debug the search input
     
-    const results = database.filter(item => 
+    filteredData = database.filter(item => 
         item.Case.toString().toLowerCase().includes(query) ||
-        (item.Part && item.Part.toLowerCase().includes(query)) ||  // Ensure item.Part is a string
-        (item.Position && item.Position.toString().includes(query)) ||  // Convert Position to string for comparison
-        (item.Location && item.Location.toLowerCase().includes(query))  // Ensure item.Location is a string
+        (item.Part && item.Part.toLowerCase().includes(query)) ||
+        (item.Position && item.Position.toString().includes(query)) ||
+        (item.Location && item.Location.toLowerCase().includes(query))
     );
-    
-    console.log('Search Results:', results);  // Debug the filtered results
 
-    renderTable(results);  // Render filtered results
-    generateGrid(cases[0]); // Regenerate the grid for the default case
-    gridTitle.textContent = ''; // Clear the grid title
+    renderTable(filteredData); // Render the filtered data
 });
 
 
+
 // Sorting functionality
+let filteredData = [...database]; // Store filtered results
+
 document.querySelectorAll('th').forEach((header, index) => {
     header.addEventListener('click', () => {
         const columnKey = ['Case', 'Part', 'Position', 'Location'][index];
         if (!columnKey) return; // Skip if no corresponding column key
+
         // Clear sorting state for all headers
         document.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+
         // Toggle sort order and apply class
         currentSortOrder = (currentSortColumn === columnKey && currentSortOrder === 'asc') ? 'desc' : 'asc';
         currentSortColumn = columnKey;
         header.classList.add(currentSortOrder === 'asc' ? 'sort-asc' : 'sort-desc');
-        // Sort and render the table
-        const sortedData = [...database].sort((a, b) => {
+
+        // Sort and render the currently filtered data, not full database
+        filteredData.sort((a, b) => {
             const valueA = a[columnKey].toString().toLowerCase();
             const valueB = b[columnKey].toString().toLowerCase();
             return currentSortOrder === 'asc' 
                 ? valueA.localeCompare(valueB)
                 : valueB.localeCompare(valueA);
         });
-        renderTable(sortedData);
+
+        renderTable(filteredData); // Render sorted filtered data
     });
 });
+
 
 
 // Responsive layout handling
