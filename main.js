@@ -29,13 +29,13 @@ let currentCaseData = cases[0]; // Default to first case
 let currentSortColumn = null;
 let currentSortOrder = 'asc';
 
+//********************************************* 
+// HIGHLIGHTGRID defines layer colours for the layer-display table
+//*********************************************
 
-// Core grid functions
-function highlightGrid(position, locations) {
-    if (!locations) {
-        return;
-    }
-    // Define layer colors (Extend this for additional layers)
+function highlightGrid(position, locations, occupiedLayers) {
+    if (!locations) return;
+
     const layerColors = {
         1: 'orange',
         2: 'yellow',
@@ -44,34 +44,36 @@ function highlightGrid(position, locations) {
         5: 'purple',
         6: 'red'
     };
-    // Reset all cells to default while preserving alternating pattern
-    const allCells = document.querySelectorAll('#grid-body td');
-    allCells.forEach((cell, index) => {
-        const row = Math.floor(index / currentCaseData.Width);
-        const col = index % currentCaseData.Width;
+
+    // Reset grid cells
+    document.querySelectorAll('#grid-body td').forEach(cell => {
         cell.className = 'default';
-        if ((row + col) % 2 === 1) {
-            cell.classList.add('alternate');
-        }
         cell.style.backgroundColor = cell.classList.contains('alternate') ? '#f5f5f5' : 'white';
     });
-    // Split locations and process each one
+
+    // Determine the topmost layer and its color
+    const topLayer = Math.min(...occupiedLayers);
+    const topColor = layerColors[topLayer] || 'gray';
+
+    // Highlight all occupied layers with the topmost layer's color
     locations.split(',').forEach(location => {
         const letter = location.trim().charAt(0);
         const number = parseInt(location.trim().substring(1));
-        const rowIndex = number +1; // add 1 to account for headers
-        const colIndex = letter.charCodeAt(0) - 64 +1; // Convert letter to number and add 1 to account for headers
+        const rowIndex = number + 1;
+        const colIndex = letter.charCodeAt(0) - 64 + 1;
+
         const cell = document.querySelector(`#grid-body tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`);
         if (cell) {
-            // Apply color based on Position value using layerColors
-            const color = layerColors[position] || 'gray'; // Default to gray if not found
-            cell.style.backgroundColor = color;
+            cell.style.backgroundColor = topColor;
         }
     });
 }
 
 
-// DataTable rendering and management functions
+
+//*********************************************
+// RENDERTABLE renders part table
+//*********************************************
 function renderTable(data) {
     if (!tableBody) {
         return;
@@ -96,7 +98,11 @@ function renderTable(data) {
         tableBody.innerHTML = '<tr><td colspan="4">Error loading data</td></tr>';
     }
 }
-//resets data-table view
+
+
+//*********************************************
+// RESETTABLE data-table view
+//*********************************************
 function resetTable() {
     document.querySelectorAll('th').forEach(header => {
         header.classList.remove('sort-asc', 'sort-desc', 'active-sort');
@@ -108,62 +114,49 @@ function resetTable() {
 }
 
 
+//*********************************************
+// SHOWLAYERS generates the layer-display table
+//*********************************************
 
-// Layer key table
-function showLayers(layers = 2, position = 0) {
+function showLayers(layers = 2, occupiedLayers = []) {
     const layerContainer = document.getElementById('layers');
-    layerContainer.innerHTML = ''; // Clear previous content
+    layerContainer.innerHTML = ''; 
     const table = document.createElement('table');
     table.id = 'layer-display';
     const tbody = document.createElement('tbody');
-    // Create a header row
-    const headerRow = document.createElement('tr');
-    const headerNumCell = document.createElement('th');
-    headerNumCell.textContent = ''; 
-    headerRow.appendChild(headerNumCell);
-    const headerLayerCell = document.createElement('th');
-    headerLayerCell.textContent = 'Layer';
-    headerLayerCell.style.opacity = '0';  // Hide the header opacity for visual preference
-    headerRow.appendChild(headerLayerCell);
-    table.appendChild(headerRow);
-    // Define layer colors
-    const layerColors = {
-        1: 'orange',
-        2: 'yellow',
-        3: 'green',
-        4: 'blue',
-        5: 'purple',
-        6: 'red'
-    };
-    // Dynamically generate rows based on the `layers` value
+
     for (let i = 1; i <= layers; i++) {
         const row = document.createElement('tr');
-        // Numbering Column
+
         const numCell = document.createElement('td');
         numCell.textContent = i;
         numCell.style.width = '15px';
         numCell.style.textAlign = 'center';
         row.appendChild(numCell);
-        // Layer Cell
+
         const layerCell = document.createElement('td');
-        layerCell.dataset.layer = i;
+        layerCell.dataset.layer = i;  // Set data-layer for reference in updateLayerFill
         layerCell.style.width = '15px';
         layerCell.style.height = '15px';
         layerCell.style.border = '1px solid black';
-        layerCell.style.textAlign = 'center';
-        layerCell.style.padding = '0';
-        // Highlight only when position is provided and valid
-        if (position && i === position) {
-            layerCell.style.backgroundColor = layerColors[i] || 'gray';
-        }
         row.appendChild(layerCell);
+
         tbody.appendChild(row);
     }
+
     table.appendChild(tbody);
     layerContainer.appendChild(table);
+
+    // Call updateLayerFill immediately after creating table
+    updateLayerFill(occupiedLayers);
 }
 
-// Function to set the grid title
+
+
+
+//*********************************************
+// UPDATEGRIDTITLE sets the grid title
+//*********************************************
 function updateGridTitle(caseData, selected) {
     const gridTitle = document.getElementById('grid-title');
     
@@ -180,15 +173,20 @@ function updateGridTitle(caseData, selected) {
     }
 }
 
+
+//Required on load to set defaults when nothing is selected.
 updateGridTitle(); // This will display default text
 // This will show the empty table with no highlighted layers
 showLayers();
 
 
-// Function to update layers fill based on selection
-function updateLayerFill(selectedLayer) {
-    const cells = document.querySelectorAll('#layer-display td[data-layer]');
-    // Define layer colors (Extend this for additional layers)
+
+//*********************************************
+// UPDATELAYERFILL Function to update layer-display table cell colour and position based on data-table row selection
+//*********************************************
+
+function updateLayerFill(occupiedLayers) {
+    const rows = document.querySelectorAll('#layer-display tr');
     const layerColors = {
         1: 'orange',
         2: 'yellow',
@@ -197,19 +195,33 @@ function updateLayerFill(selectedLayer) {
         5: 'purple',
         6: 'red'
     };
-    cells.forEach(cell => {
-        let layerNum = parseInt(cell.dataset.layer, 10);
-        cell.style.backgroundColor = ''; // Reset all cells
-        if (layerNum === selectedLayer) {
-            // Apply the correct color from the layerColors object
-            let color = layerColors[layerNum] || 'gray'; // Default to gray if undefined
-            cell.style.backgroundColor = color;
+
+    if (occupiedLayers.length === 0) return;
+
+    // Find the topmost layer
+    const topLayer = Math.min(...occupiedLayers);
+    const topColor = layerColors[topLayer] || 'gray';
+
+    // Loop through each occupied layer and set the same color
+    occupiedLayers.forEach(layerNum => {
+        const row = rows[layerNum - 1];  // Adjust for 0-based index
+        if (row) {
+            const cell = row.querySelector('td[data-layer]');
+            if (cell) {
+                cell.style.backgroundColor = topColor;
+            }
         }
     });
 }
 
 
-//This one does some stuff
+
+
+
+//*********************************************
+//This one does some stuff, don't worry about it, not an easter egg or anything.
+//*********************************************
+
 document.addEventListener('DOMContentLoaded', () => {
     const padder = document.querySelector('.padder');
     const body = document.body;
@@ -280,30 +292,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+//*********************************************
+// SELECTROW Data-Table row selection
+//*********************************************
 
-// Data-Table row selection
 function selectRow(index, itemData) {
     const selected = itemData || database[index];
-    // Find matching case data
+    if (!selected) return;
+
     const caseData = cases.find(c => c.Case === selected.Case) || cases[0];
-    // Regenerate grid with selected case dimensions
+
+    // Calculate the occupied layers based on the item and the layers
+    let occupiedLayers = [];
+    let currentLayer = selected.Position;
+
+    // Ensure all the relevant layers are included for the selected item
+    for (let i = currentLayer; i <= caseData.Layers; i++) {
+        occupiedLayers.push(i); // Add each layer to occupied layers
+    }
+
+    // Highlight the grid with the occupied layers
     generateGrid(caseData);
-    /*console.log('Highlighting:', selected.Position, selected.Location);*/
-    highlightGrid(selected.Position, selected.Location); // Pass position value
-    // Update UI: Remove selection from all rows, add to the clicked row
-    document.querySelectorAll('#table-body tr').forEach(row => row.classList.remove('selected'));
-    document.querySelectorAll('#table-body tr')[index].classList.add('selected');
-    // Display image (assuming displayImage is a function that handles image display)
-    displayImage(selected.Part);
-    // Update grid title: Display selected case data
-    updateGridTitle(caseData, selected); // Call to update grid title with selected data
-    // Ensure the correct Layers value from the caseData is passed to showLayers
-    const layers = caseData.Layers;  // Get Layers from the selected case data
-    showLayers(layers, selected.Position);  // Update layer display with correct number of layers and position
+    highlightGrid(selected.Position, selected.Location, occupiedLayers);
+    showLayers(caseData.Layers, occupiedLayers); // Display the layers correctly
 }
 
 
 
+
+
+
+//*********************************************
+// DISPLAYIMAGE the selected part image
+//*********************************************
 
 function displayImage(partName) {
     const imagePreview = document.getElementById('image-preview');
@@ -346,7 +367,9 @@ function getColumnLabel(index) {
     return label;
 }
 
-// Grid generation function
+//*********************************************
+// GENERATEGRID generation for the selected case
+//*********************************************
 function generateGrid(caseData = cases[0]) {
     currentCaseData = caseData;
     
@@ -422,7 +445,10 @@ document.getElementById('clear-button').addEventListener('click', () => {
 });
 
 
+
+//*********************************************
 // Search functionality
+//*********************************************
 searchBox.addEventListener('input', () => {
     const query = searchBox.value.trim().toLowerCase();
     
@@ -438,7 +464,9 @@ searchBox.addEventListener('input', () => {
 
 
 
+//*********************************************
 // Sorting functionality
+//*********************************************
 let filteredData = [...database]; // Store filtered results
 
 document.querySelectorAll('th').forEach((header, index) => {

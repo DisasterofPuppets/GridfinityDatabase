@@ -1,7 +1,7 @@
 const database = [
     {"Case":"Fasteners / Inserts","Part":"Drill Bits","Position":2,"Location":"F4","Image":"Part Images/DillBits.png"},
     {"Case":"Workshop","Part":"M3 8mm","Position":2,"Location":"E4","Image":"Part Images/M38mm.png"},
-    {"Case":"Electronics","Part":"M4 10mm","Position":2,"Location":"B5,C5","Image":"Part Images/M410mm.png"},
+    {"Case":"Electronics","Part":"M4 10mm","Position":1,"Location":"B5,C5","Image":"Part Images/M410mm.png"},
     {"Case":"Welding","Part":"M4 Wingnut","Position":2,"Location":"B1","Image":"Part Images/M4Wingnutpng"},
     {"Case":"Fasteners / Inserts","Part":"M3 25mm","Position":2,"Location":"C1","Image":"Part Images/M325mm.png"},
     {"Case":"Fasteners / Inserts","Part":"Misc Imperial","Position":2,"Location":"D1","Image":"Part Images/MiscImperial.png"},
