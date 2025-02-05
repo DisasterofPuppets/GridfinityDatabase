@@ -302,19 +302,18 @@ function selectRow(index, itemData) {
 
     const caseData = cases.find(c => c.Case === selected.Case) || cases[0];
 
-    // Calculate the occupied layers based on the item and the layers
     let occupiedLayers = [];
     let currentLayer = selected.Position;
-
-    // Ensure all the relevant layers are included for the selected item
     for (let i = currentLayer; i <= caseData.Layers; i++) {
-        occupiedLayers.push(i); // Add each layer to occupied layers
+        occupiedLayers.push(i);
     }
 
-    // Highlight the grid with the occupied layers
     generateGrid(caseData);
     highlightGrid(selected.Position, selected.Location, occupiedLayers);
-    showLayers(caseData.Layers, occupiedLayers); // Display the layers correctly
+    showLayers(caseData.Layers, occupiedLayers);
+
+    // Ensure image updates correctly
+    displayImage(selected.Part);
 }
 
 
@@ -328,34 +327,29 @@ function selectRow(index, itemData) {
 
 function displayImage(partName) {
     const imagePreview = document.getElementById('image-preview');
-    if (!imagePreview) {
-        return;
-    }
-    // Clear existing content
-    imagePreview.innerHTML = '';
+    if (!imagePreview) return;
+    
+    imagePreview.innerHTML = ''; // Clear existing content
 
-    // Remove all spaces from the part name
-    const cleanPartName = partName.replace(/\s+/g, '');
-
-    // Create and append image element
+    const cleanPartName = partName.trim().replace(/\s+/g, '');
     const img = document.createElement('img');
     img.style.maxWidth = '100%';
     img.style.height = 'auto';
     img.alt = partName;
-    // Handle image loading errors
+
+    // Force browser to refresh image
+    img.src = `Part Images/${cleanPartName}.png?timestamp=${new Date().getTime()}`;
+
     img.onerror = function() {
         img.src = 'Part Images/default.png';
-
-        // Handle default image error
         img.onerror = function() {
             imagePreview.innerHTML = `<div style="color: red;">Image not available</div>`;
         };
     };
-    // Set initial image source
-    img.src = `Part Images/${cleanPartName}.png`;
 
     imagePreview.appendChild(img);
 }
+
 
 
 function getColumnLabel(index) {
