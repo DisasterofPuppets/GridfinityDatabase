@@ -311,6 +311,7 @@ function selectRow(index, itemData) {
     generateGrid(caseData);
     highlightGrid(selected.Position, selected.Location, occupiedLayers);
     showLayers(caseData.Layers, occupiedLayers);
+    updateGridTitle(caseData, selected);
 
     // Ensure image updates correctly
     displayImage(selected.Part);
