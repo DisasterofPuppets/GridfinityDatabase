@@ -110,7 +110,7 @@ function resetTable() {
     renderTable(database);
     generateGrid(cases[0]);
     gridTitle.textContent = '';
-    imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Item Image" />';
+    imageContainer.innerHTML = '<img src="Part Images/Default.png" alt="Item Image" />';
 }
 
 
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageContainer = document.getElementById('image-preview');
 
     if (imageContainer) {
-        imageContainer.innerHTML = '<img src="Part Images/default.png" alt="Default Image" style="max-width: 100%; height: auto;" />';
+        imageContainer.innerHTML = '<img src="Part Images/Default.png" alt="Default Image" style="max-width: 100%; height: auto;" />';
     }
 
     // Array of pattern images
@@ -341,7 +341,7 @@ function displayImage(partName) {
     img.src = `Part Images/${cleanPartName}.png?timestamp=${new Date().getTime()}`;
 
     img.onerror = function() {
-        img.src = 'Part Images/default.png';
+        img.src = 'Part Images/Missing.png';
         img.onerror = function() {
             imagePreview.innerHTML = `<div style="color: red;">Image not available</div>`;
         };
@@ -351,7 +351,9 @@ function displayImage(partName) {
 }
 
 
-
+//*********************************************
+// GETCOLUMNLABEL generates the column labels
+//*********************************************
 function getColumnLabel(index) {
     let label = "";
     while (index >= 0) {
@@ -411,10 +413,9 @@ function generateGrid(caseData = cases[0]) {
 
 
 
-
-
-
-// Event Listeners
+//*********************************************
+// DOMContentLoaded Checks to ensure the database is loaded
+//*********************************************
 document.addEventListener('DOMContentLoaded', () => {
     if (database.length === 0) {
         return;
@@ -426,16 +427,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render the initial table
     renderTable(database);
     // Display default part image on load
-    imageContainer.innerHTML = '<img src="Part%20Images/default.png" alt="Default Part Image" style="max-width: 100%; height: auto;" />';
+    imageContainer.innerHTML = '<img src="Part%20Images/Default.png" alt="Default Part Image" style="max-width: 100%; height: auto;" />';
 });
 
+
+
+//*********************************************
 // Clear button functionality
+//*********************************************
 document.getElementById('clear-button').addEventListener('click', () => {
     document.getElementById('search-box').value = '';
     renderTable(database);
     generateGrid(cases[0]);  // Reset to default case
-    imageContainer.innerHTML = '<img src="Part%20Images/default.png" alt="Item Image" />';
+    imageContainer.innerHTML = '<img src="Part%20Images/Default.png" alt="Item Image" />';
     gridTitle.textContent = `Case: ${cases[0].Case}`;
+    highlightGrid("","","");
+    showLayers();
 });
 
 
