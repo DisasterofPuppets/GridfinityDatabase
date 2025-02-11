@@ -78,7 +78,7 @@ function saveDataToFile() {
             "Case": caseName,
             "Width": parseInt(widthInput.value) || 0,
             "Height": parseInt(heightInput.value) || 0,
-            "Layers": parseInt(layersInput.value) || 2
+            "CaseLayers": parseInt(layersInput.value) || 2
         };
     });
 
@@ -110,71 +110,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const padder = document.querySelector('.padder');
     const body = document.body;
     const homeLink = document.querySelector('.index a');
-    
+
     // Array of pattern images
     const patterns = [
         'Images/Pattern1.png',
         'Images/Pattern2.png',
         'Images/Pattern3.png'
     ];
-    
-    // Function to get random pattern that's different from the current one
-    function getRandomPattern() {
-        const currentPattern = localStorage.getItem('currentPattern');
-        let availablePatterns = patterns.filter(pattern => pattern !== currentPattern);
-        
-        // If somehow all patterns were filtered out (shouldn't happen with our logic)
+
+    // Function to get a random pattern different from the current one
+    function getRandomPattern(previousPattern) {
+        let availablePatterns = patterns.filter(pattern => pattern !== previousPattern);
+
+        // If all patterns are filtered out (shouldn't happen), reset to all patterns
         if (availablePatterns.length === 0) {
             availablePatterns = patterns;
         }
-        
+
         return availablePatterns[Math.floor(Math.random() * availablePatterns.length)];
     }
-    
+
     // Check localStorage for saved preference and pattern
-    const backgroundEnabled = localStorage.getItem('backgroundEnabled') === 'true';
-    const currentPattern = localStorage.getItem('currentPattern');
-    
-    if (backgroundEnabled) {
+    let backgroundEnabled = localStorage.getItem('backgroundEnabled') === 'true';
+    let currentPattern = localStorage.getItem('currentPattern') || '';
+
+    if (backgroundEnabled && currentPattern) {
         body.classList.add('background-enabled');
         padder.classList.add('active');
-        if (currentPattern) {
-            body.style.backgroundImage = `url('${currentPattern}')`;
-        }
+        body.style.backgroundImage = `url('${currentPattern}')`;
     } else {
         body.style.backgroundImage = 'none';
     }
-    
+
     // Update home link click handler
-    homeLink.addEventListener('click', (e) => {
+    homeLink.addEventListener('click', () => {
         localStorage.setItem('backgroundEnabled', body.classList.contains('background-enabled'));
         if (body.style.backgroundImage && body.style.backgroundImage !== 'none') {
             localStorage.setItem('currentPattern', body.style.backgroundImage.replace(/url\(['"](.+)['"]\)/, '$1'));
         }
     });
-    
+
     padder.addEventListener('click', () => {
-        // Toggle background state
-        const isCurrentlyEnabled = body.classList.contains('background-enabled');
-        
+        let isCurrentlyEnabled = body.classList.contains('background-enabled');
+
         if (isCurrentlyEnabled) {
-            // Turn off background
+            // Disable background but retain the last selected pattern
             body.classList.remove('background-enabled');
             padder.classList.remove('active');
             body.style.backgroundImage = 'none';
+            localStorage.setItem('backgroundEnabled', 'false');
         } else {
-            // Turn on background with random pattern (different from last used)
+            // Enable background and select a different pattern
             body.classList.add('background-enabled');
             padder.classList.add('active');
-            const randomPattern = getRandomPattern();
-            body.style.backgroundImage = `url('${randomPattern}')`;
-            localStorage.setItem('currentPattern', randomPattern);
+
+            let newPattern = getRandomPattern(currentPattern);
+            currentPattern = newPattern; // Update stored pattern
+
+            body.style.backgroundImage = `url('${currentPattern}')`;
+            localStorage.setItem('backgroundEnabled', 'true');
+            localStorage.setItem('currentPattern', currentPattern);
         }
-        
-        // Save preference
-        localStorage.setItem('backgroundEnabled', !isCurrentlyEnabled);
     });
 });
+
 
 
 
@@ -250,7 +249,7 @@ function validateColumns(file) {
         const sheet = workbook.Sheets[firstSheetName];
         const json = XLSX.utils.sheet_to_json(sheet);
 
-        const requiredColumns = ['Case', 'Part', 'Location', 'Position'];
+        const requiredColumns = ['Case', 'Part', 'Layer', 'Location'];
         const actualColumns = Object.keys(json[0] || {}).map(col => col.toLowerCase());
 
         const missingColumns = requiredColumns.filter(col => !actualColumns.includes(col.toLowerCase()));
@@ -350,9 +349,9 @@ function formatData(json) {
     return json.map((row) => ({
         Case: row.Case,
         Part: row.Part || "Unknown",
-        Position: row.Position || "Unknown",
+        Layer: row.Layer || "Unknown",
         Location: row.Location || "",
-        Layers: row.Layers || "1",
+        CaseLayers: row.Layers || "1",
     }));
 }
 
@@ -859,8 +858,8 @@ function handleExcelData(jsonData) {
         const formattedData = jsonData.map(row => ({
             Case: row.Case || '',
             Part: row.Part || 'Unknown',
-            Position: row.Position || 'Unknown',
-            Location: row.Location || '',
+            Layer: row.Layer || '',
+            Location: row.Location || 'Unknown',
             Image: `Part Images/${row.Part ? row.Part.replace(/[\s_]+/g, '') : 'unknown'}.png`
         }));
 
@@ -902,7 +901,7 @@ function handleCSVFile(content) {
                 return {
                     Case: rowData.Case || '',
                     Part: rowData.Part || 'Unknown',
-                    Position: rowData.Position || 'Unknown',
+                    Layer: rowData.Layer || 'Unknown',
                     Location: rowData.Location || '',
                     Image: `Part Images/${rowData.Part ? rowData.Part.replace(/[\s_]+/g, '') : 'unknown'}.png`
                 };

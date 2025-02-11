@@ -33,7 +33,7 @@ let currentSortOrder = 'asc';
 // HIGHLIGHTGRID defines layer colours for the layer-display table
 //*********************************************
 
-function highlightGrid(position, locations, occupiedLayers) {
+function highlightGrid(layer, locations, occupiedLayers) {
     if (!locations) return;
 
     const layerColors = {
@@ -51,36 +51,33 @@ function highlightGrid(position, locations, occupiedLayers) {
         cell.style.backgroundColor = cell.classList.contains('alternate') ? '#f5f5f5' : 'white';
     });
 
-    // Determine the topmost layer and its color
-    const topLayer = Math.min(...occupiedLayers);
-    const topColor = layerColors[topLayer] || 'gray';
-
-    // Highlight all occupied layers with the topmost layer's color
+    // Highlight only the cells corresponding to the occupied layers
     locations.split(',').forEach(location => {
         const letter = location.trim().charAt(0);
         const number = parseInt(location.trim().substring(1));
         const rowIndex = number + 1;
         const colIndex = letter.charCodeAt(0) - 64 + 1;
 
-        const cell = document.querySelector(`#grid-body tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`);
-        if (cell) {
-            cell.style.backgroundColor = topColor;
-        }
+        occupiedLayers.forEach(layerNum => {
+            const cell = document.querySelector(`#grid-body tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`);
+            if (cell && layerNum === layer) {
+                cell.style.backgroundColor = layerColors[layerNum];
+            }
+        });
     });
 }
-
-
 
 //*********************************************
 // RENDERTABLE renders part table
 //*********************************************
+
 function renderTable(data) {
     if (!tableBody) {
         return;
     }
     
     if (!Array.isArray(data) || data.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4">No data available</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5">No data available</td></tr>';
         return;
     }
     
@@ -89,13 +86,13 @@ function renderTable(data) {
             <tr onclick="selectRow(${index}, ${JSON.stringify(item).replace(/"/g, '&quot;')})">
                 <td>${item.Case}</td>
                 <td>${item.Part}</td>
-                <td>${item.Position}</td>
+                <td>${item.Layer}</td>
                 <td>${item.Location}</td>
-                <td style="display:none;">${item.Image}</td>
+                <td style="display:none;">${item.CaseLayers}</td>
             </tr>
         `).join('');
     } catch (error) {
-        tableBody.innerHTML = '<tr><td colspan="4">Error loading data</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5">Error loading data</td></tr>';
     }
 }
 
@@ -163,12 +160,12 @@ function updateGridTitle(caseData, selected) {
     // Set default grid title text if no selection exists
     if (!selected) {
         gridTitle.innerHTML = `<b>Case: </b> <em>No Case Selected</em><br>` +
-            `<b>Position: </b> <em>No Position Selected</em><br>` +
+            `<b>Layer: </b> <em>No Layer Selected</em><br>` +
             `<b>Location: </b> <em>No Location Selected</em>`;
     } else {
         // Set grid title with selected data
         gridTitle.innerHTML = `<b>Case: </b> ${caseData.Case}<br>` +
-            `<b>Position: </b> ${selected.Position}<br>` +
+            `<b>Layer: </b> ${selected.Layer}<br>` +
             `<b>Location: </b> ${selected.Location}`;
     }
 }
@@ -196,13 +193,21 @@ function updateLayerFill(occupiedLayers) {
         6: 'red'
     };
 
+    // Reset layer cells
+    rows.forEach(row => {
+        const cell = row.querySelector('td[data-layer]');
+        if (cell) {
+            cell.style.backgroundColor = 'white';
+        }
+    });
+
     if (occupiedLayers.length === 0) return;
 
-    // Find the topmost layer
+    // Determine the topmost layer and its color
     const topLayer = Math.min(...occupiedLayers);
     const topColor = layerColors[topLayer] || 'gray';
 
-    // Loop through each occupied layer and set the same color
+    // Loop through each occupied layer and set the topmost layer's color
     occupiedLayers.forEach(layerNum => {
         const row = rows[layerNum - 1];  // Adjust for 0-based index
         if (row) {
@@ -213,9 +218,6 @@ function updateLayerFill(occupiedLayers) {
         }
     });
 }
-
-
-
 
 
 //*********************************************
@@ -239,10 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
         'Images/Pattern3.png'
     ];
 
-    function getRandomPattern() {
-        const currentPattern = localStorage.getItem('currentPattern');
-        let availablePatterns = patterns.filter(pattern => pattern !== currentPattern);
+    // Function to get a random pattern different from the current one
+    function getRandomPattern(previousPattern) {
+        let availablePatterns = patterns.filter(pattern => pattern !== previousPattern);
 
+        // If all patterns are filtered out (shouldn't happen), reset to all patterns
         if (availablePatterns.length === 0) {
             availablePatterns = patterns;
         }
@@ -252,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load stored background preference
     let backgroundEnabled = localStorage.getItem('backgroundEnabled') === 'true';
-    let currentPattern = localStorage.getItem('currentPattern');
+    let currentPattern = localStorage.getItem('currentPattern') || '';
 
     if (backgroundEnabled && currentPattern) {
         body.classList.add('background-enabled');
@@ -272,22 +275,25 @@ document.addEventListener('DOMContentLoaded', () => {
         let isCurrentlyEnabled = body.classList.contains('background-enabled');
 
         if (isCurrentlyEnabled) {
+            // Disable background but keep the last selected pattern
             body.classList.remove('background-enabled');
             padder.classList.remove('active');
             body.style.backgroundImage = 'none';
-            currentPattern = '';
+            localStorage.setItem('backgroundEnabled', 'false');
         } else {
+            // Enable background and select a different pattern
             body.classList.add('background-enabled');
             padder.classList.add('active');
-            currentPattern = getRandomPattern();
-            body.style.backgroundImage = `url('${currentPattern}')`;
-        }
+            
+            let newPattern = getRandomPattern(currentPattern);
+            currentPattern = newPattern; // Update stored pattern
 
-        localStorage.setItem('backgroundEnabled', !isCurrentlyEnabled);
-        localStorage.setItem('currentPattern', currentPattern);
+            body.style.backgroundImage = `url('${currentPattern}')`;
+            localStorage.setItem('backgroundEnabled', 'true');
+            localStorage.setItem('currentPattern', currentPattern);
+        }
     });
 });
-
 
 
 
@@ -302,15 +308,29 @@ function selectRow(index, itemData) {
 
     const caseData = cases.find(c => c.Case === selected.Case) || cases[0];
 
-    let occupiedLayers = [];
-    let currentLayer = selected.Position;
-    for (let i = currentLayer; i <= caseData.Layers; i++) {
-        occupiedLayers.push(i);
+    let occupiedLayers = [selected.Layer]; // Start with the selected layer
+
+    // Check for parts in the same case and location but different layers
+    let currentLayer = selected.Layer;
+
+    while (currentLayer < caseData.CaseLayers) {
+        currentLayer++;
+        const partInNextLayer = database.find(item => 
+            item.Case === selected.Case && 
+            item.Location === selected.Location && 
+            item.Layer === currentLayer
+        );
+
+        if (partInNextLayer) {
+            break;
+        } else {
+            occupiedLayers.push(currentLayer);
+        }
     }
 
     generateGrid(caseData);
-    highlightGrid(selected.Position, selected.Location, occupiedLayers);
-    showLayers(caseData.Layers, occupiedLayers);
+    highlightGrid(selected.Layer, selected.Location, occupiedLayers);
+    showLayers(caseData.CaseLayers, occupiedLayers);
     updateGridTitle(caseData, selected);
 
     // Ensure image updates correctly
@@ -415,7 +435,7 @@ function generateGrid(caseData = cases[0]) {
 
 
 //*********************************************
-// DOMContentLoaded Checks to ensure the database is loaded
+// Checks to ensure the database is loaded
 //*********************************************
 document.addEventListener('DOMContentLoaded', () => {
     if (database.length === 0) {
@@ -469,11 +489,12 @@ searchBox.addEventListener('input', () => {
 //*********************************************
 // Sorting functionality
 //*********************************************
+
 let filteredData = [...database]; // Store filtered results
 
 document.querySelectorAll('th').forEach((header, index) => {
     header.addEventListener('click', () => {
-        const columnKey = ['Case', 'Part', 'Position', 'Location'][index];
+        const columnKey = ['Case', 'Part', 'Layer', 'Location'][index];
         if (!columnKey) return; // Skip if no corresponding column key
 
         // Clear sorting state for all headers
@@ -498,10 +519,27 @@ document.querySelectorAll('th').forEach((header, index) => {
 });
 
 
-
 // Responsive layout handling
 window.addEventListener('resize', () => {
     const leftColumn = document.querySelector('.left-column');
     const searchContainer = document.querySelector('.search-container');
     searchContainer.style.width = leftColumn.offsetWidth + 'px';
+});
+
+//*********************************************
+// This one handles the highlighting and sticky selection of the data-table rows
+//********************************************* 
+
+document.addEventListener("DOMContentLoaded", function () {
+    const tableRows = document.querySelectorAll("#table-body tr");
+
+    tableRows.forEach(row => {
+        row.addEventListener("click", function () {
+            // Remove the 'selected' class from all rows before applying it
+            tableRows.forEach(r => r.classList.remove("selected"));
+
+            // Add 'selected' class to the clicked row
+            this.classList.add("selected");
+        });
+    });
 });

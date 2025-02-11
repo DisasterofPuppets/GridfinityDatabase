@@ -278,25 +278,35 @@ body, html {
 		
 /*Data-Table Row*/		
 
-		#data-table tr:nth-child(odd) {
-    		background-color: white;
-		}
+	/* Row color for odd and even rows */
+#data-table tr:nth-child(odd) {
+    background-color: white;
+}
 
-		#table-body tr:nth-child(even) {
-			background-color: #f2f2f2;
-		}
+#table-body tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-		#table-body tr:hover {
-			background-color: #d6d6d6 !important;
-		}
+/* Hover effect for non-selected rows */
+#table-body tr:hover {
+    background-color: #d6d6d6 !important;
+}
 
-		#table-body tr.selected {
-			background-color: #a0a0a0 !important;
-		}
+/* Keep the selected row with a consistent background */
+#table-body tr.selected {
+    background-color: #a0a0a0 !important; /* Ensure the selected row has a constant background */
+}
 
-		#table-body tr.selected:hover {
-			background-color: #a0a0a0 !important;
-		}
+/* Ensure the selected row remains the same color when hovered */
+#table-body tr.selected:hover {
+    background-color: #a0a0a0 !important; /* Keep the selection even when hovered */
+}
+
+/* Hover effect for non-selected rows */
+#table-body tr:not(.selected):hover {
+    background-color: #d6d6d6 !important; /* Hover effect for non-selected rows */
+}
+
 		
 
 		
