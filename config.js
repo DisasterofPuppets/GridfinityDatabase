@@ -860,7 +860,8 @@ function handleExcelData(jsonData) {
             Part: row.Part || 'Unknown',
             Layer: row.Layer || '',
             Location: row.Location || 'Unknown',
-            Image: `Part Images/${row.Part ? row.Part.replace(/[\s_]+/g, '') : 'unknown'}.png`
+            // no longer required 
+            // Image: `Part Images/${row.Part ? row.Part.replace(/[\s_]+/g, '') : 'unknown'}.png`
         }));
 
         // Generate userDB string
@@ -903,7 +904,7 @@ function handleCSVFile(content) {
                     Part: rowData.Part || 'Unknown',
                     Layer: rowData.Layer || 'Unknown',
                     Location: rowData.Location || '',
-                    Image: `Part Images/${rowData.Part ? rowData.Part.replace(/[\s_]+/g, '') : 'unknown'}.png`
+                    //Image: `Part Images/${rowData.Part ? rowData.Part.replace(/[\s_]+/g, '') : 'unknown'}.png`
                 };
             });
 
