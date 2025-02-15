@@ -344,7 +344,7 @@ body, html {
 			justify-content: flex-end;
 			align-items: center;
 			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
-			width: auto;
+			width: 100%;
 		}
 		
         .image-preview {
@@ -358,13 +358,42 @@ body, html {
             width: 220px;
         }
 
+		.selectedinfo{
+			display: flex;
+			flex-direction: row;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+			width: auto;
+			height: auto;
+			padding: 10px;
+			gap: 5px;
+			justify-content: center;
+		}
+
         .grid-title {
-			text-align: center;	
+			text-align: right;	
 			box-sizing: border-box;
 			line-height: 1.5;
 			width: auto;
 			font-family: Arial, sans-serif;
         }
+
+		.gridcontentalign {
+			text-align: left;	
+			box-sizing: border-box;
+			line-height: 1.5;
+			width: auto;
+			font-family: Arial, sans-serif;
+        }
+
+
+        .grid-content {
+			text-align: left;	
+			box-sizing: border-box;
+			line-height: 1.5;
+			width: auto;
+			font-family: Arial, sans-serif;
+        }
+
 		
 		.grid-container {
 			display: inline-block;

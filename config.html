@@ -41,7 +41,9 @@ Now that's out of the way, Enjoy!
 		<div class="left-column">
 
 			<div class="form">
-
+					<div class="form-title">
+						<h2>Convert your database</h2>
+					</div>
 					<div class="input">
 						<button id="uploadFileButton" title="Select a file to upload">Select your .csv, .xls, .xlsx, .js or file</button>
 						<input type="file" id="fileInput" accept=".xlsx, .xls, .csv, .js"/></input>
@@ -70,8 +72,18 @@ Now that's out of the way, Enjoy!
 				<div id="preview" class="preview">
 				<!--preview content goes here-->
 				</div>
-<!-- End preview data -->									
+				<!-- End preview data -->									
 
+
+				<div id="whattocheck-wrapper" class="whattocheck-wrapper">
+<!-- what to check -->																	 
+				<div id="whattocheck" class="whattocheck">
+				<!-- what to check goes here-->
+				</div>
+<!-- end what to check -->				
+				</div>
+
+				
 <!--ask user iseverything is ok-->
 				<div class="everythingok" id="everythingok">
 					<p class="cases"><!--amount of cases here from js--></p>
@@ -79,16 +91,14 @@ Now that's out of the way, Enjoy!
 				
 				</div>
 <!--end everything is ok-->
+</div>
+<!-- end of preview container-->
 
-			</div> 
 <!--Start Form Wrapper-->
 <div class="formwrapper" id="formwrapper">
-<!-- Excellent message, initially hidden -->
-<div id="excellent">
-
-</div>
-			
-<!-- end of preview container-->
+			<!-- Excellent message, initially hidden -->
+			<div id="excellent">
+			</div>
 			<div id="uniqueCasesContainer">
 				<!-- the case config shows here-->
 			</div>
@@ -100,7 +110,7 @@ Now that's out of the way, Enjoy!
 </div>
 <!-- End of form wrapper-->
 			
-		</div>
+</div>
 <!--End of left-column -->
 	
 <!--Right Column-->

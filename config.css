@@ -272,7 +272,12 @@ header {
 		
 /* Code preview section */
 
-
+		#preview-container {         
+			text-align: center;
+			justify-content: center;
+			width: auto;
+			border: 1px solid black;
+		}
 
 		/* Initially hide the preview */
 		#preview {
@@ -289,6 +294,19 @@ header {
 			flex-grow: 1; 						 /* Allow the container to grow */
 		}
 /*END CODE PREVIEW*/		
+
+
+		#whattocheck-wrapper {         
+			display: flex;
+			justify-content: center;
+		}
+
+
+		#whattocheck {         
+			display: none; 	/* Start with the check hidden */
+			text-align: left;
+		}
+
 
 		convertButton {
             border-radius: 5px;                  /* Rounds corners of element */

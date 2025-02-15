@@ -18,6 +18,7 @@ Now that's out of the way, Enjoy!
 
 // DOM elements
 const previewContainer = document.getElementById('preview');
+const checkContainer = document.getElementById('whattocheck');
 const fileInput = document.getElementById('fileInput');
 const uploadFileButton = document.getElementById('uploadFileButton');
 const convertButton = document.getElementById('convertButton');
@@ -40,6 +41,7 @@ convertButton.style.backgroundColor = '#d3d3d3'; // Grey out the button
 convertButton.style.display = 'none'; // Hide the button initially
 okLink.style.display = 'none'; // Hide okLink initially
 saveButton.style.display ='none'; // Hide Save button initially
+checkContainer.style.display = 'none'; // Hide what to check initially
 
 let userDB = ''; // Global variable for userDB, initially empty
 let uniqueCases = [];
@@ -225,6 +227,7 @@ uploadFileButton.addEventListener('click', () => {
     caseCountDisplay.style.display = 'none'; // Hide the case count display
     excellent.style.display = 'none';
     saveButton.style.display = 'none'; // Hide Save button initially
+    checkContainer.style.display = 'none'; // Hide what to check initially
 
     // Clear the unique cases section (clear case input fields)
     const uniqueCasesContainer = document.getElementById('uniqueCasesContainer');
@@ -276,7 +279,8 @@ function showError(message) {
     fileName.style.display = 'none'; // Hide file name in case of invalid file
     convertButton.disabled = true;
     convertButton.style.display = 'none'; // Ensure convert button is hidden if there's an error
-    saveButton.style.display ='none'; // Hide Save button initially
+    saveButton.style.display ='none'; // Hide Save button 
+    checkContainer.style.display = 'none'; // Hide what to check 
 }
 
 // Handle valid file scenario
@@ -287,6 +291,7 @@ function handleValidFile() {
     convertButton.style.display = 'block'; // Show convert button after validation
     okLink.style.display = 'none'; // Hide OK link initially
     saveButton.style.display ='none'; // Hide Save button initially
+    checkContainer.style.display = 'none'; // Hide what to check initially
 }
 
 // Handle file input change event
@@ -333,11 +338,19 @@ convertButton.addEventListener('click', () => {
 
         previewContainer.style.display = 'block';
         previewContainer.innerHTML = formatPreviewData(formattedData);
-
+        checkContainer.style.display = 'block';
+        checkContainer.innerHTML = `<h3>Things to check</h3>
+        <input type="checkbox"><b>Case:</b> <i>Is the case name correct?</i> 
+        <br><input type="checkbox"><b>Part:</b> Do the part names display correctly and belong in the case?</i>
+        <br><input type="checkbox"><b>Layer:</b>  <i>Are the layer locations correct?</i>
+        <br><input type="checkbox"><b>Location:</b><i>Do the co-ordinates start with a letter and end with a number?</i>
+        <br><input type="checkbox"><b>CaseLayers:</b><i>Are the total number of layers for this case correct?</i>`;
+ 
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
-
         caseCountDisplay.style.display = 'block'; // Show the case count display
+
+        //Add what to check for in here
 
         countUniqueCases(); // Count unique cases after conversion
     };
@@ -381,6 +394,7 @@ function formatPreviewData(data, beforeText = 'const database = [', afterText = 
 
     return `${beforeText}<br>${formattedPreview}<br>${afterText}`;
 }
+
 
 // Count unique cases and update the display
 function countUniqueCases() {
@@ -609,6 +623,7 @@ okLink.addEventListener('click', () => {
             previewContainer.style.display = 'none';
             okLink.style.display = 'none';
             caseCountDisplay.style.display = 'none';
+            checkContainer.style.display = 'none';
             // Update excellent message
             excellent.innerHTML = "Excellent, let's setup your case dimensions";
             excellent.style.display = 'block';
@@ -627,6 +642,7 @@ okLink.addEventListener('click', () => {
                 previewContainer.style.display = 'none';
                 okLink.style.display = 'none';
                 caseCountDisplay.style.display = 'none';
+                checkContainer.style.display = 'none';
        // Update excellent message
                 excellent.innerHTML = "Excellent, let's setup your case dimensions";
                 excellent.style.display = 'block';
@@ -755,6 +771,7 @@ function handleJSFile(content) {
         convertButton.style.display = 'none';
         previewContainer.style.display = 'none';
         okLink.style.display = 'none';
+        checkContainer.style.display = 'none';
         
         // Show excellent message
         excellent.style.display = 'block';
@@ -873,14 +890,22 @@ function handleExcelData(jsonData) {
         // Update case count display
         caseCountDisplay.textContent = `Total Unique Cases: ${uniqueCases.length}`;
 
-        // Hide convert button and show OK link
+        // Hide convert button and show check and OK link
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
+        checkContainer.style.display = 'block';
+        checkContainer.innerHTML = `<h3>Things to check</h3>
+        <input type="checkbox"><b>Case:</b> <i>Is the case name correct?</i> 
+        <br><input type="checkbox"><b>Part:</b> Do the part names display correctly and belong in the case?</i>
+        <br><input type="checkbox"><b>Layer:</b>  <i>Are the layer locations correct?</i>
+        <br><input type="checkbox"><b>Location:</b><i>Do the co-ordinates start with a letter and end with a number?</i>
+        <br><input type="checkbox"><b>CaseLayers:</b><i>Are the total number of layers for this case correct?</i>`;
 
     } catch (error) {
         showError('Error processing Excel file');
     }
 }
+
 
 function handleCSVFile(content) {
     try {
@@ -919,9 +944,16 @@ function handleCSVFile(content) {
         // Update case count display
         caseCountDisplay.textContent = `Total Unique Cases: ${uniqueCases.length}`;
 
-        // Hide convert button and show OK link
+        // Hide convert button and show OK and check 
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
+        checkContainer.style.display = 'block';
+        checkContainer.innerHTML = `<h3>Things to check</h3>
+        <input type="checkbox"><b>Case:</b> <i>Is the case name correct?</i> 
+        <br><input type="checkbox"><b>Part:</b> Do the part names display correctly and belong in the case?</i>
+        <br><input type="checkbox"><b>Layer:</b>  <i>Are the layer locations correct?</i>
+        <br><input type="checkbox"><b>Location:</b><i>Do the co-ordinates start with a letter and end with a number?</i>
+        <br><input type="checkbox"><b>CaseLayers:</b><i>Are the total number of layers for this case correct?</i>`;
 
     } catch (error) {
         showError('Error processing CSV file');

@@ -23,6 +23,7 @@ const tableBody = document.getElementById('table-body');
 const grid = document.getElementById('grid');
 const imageContainer = document.getElementById('image-preview');
 const gridTitle = document.getElementById('grid-title');
+const gridContent = document.getElementById('grid-content');
 const layerContainer = document.getElementById('layers');
 let currentCaseData = cases[0]; // Default to first case
 // Sorting state tracking
@@ -156,19 +157,28 @@ function showLayers(layers = 2, occupiedLayers = []) {
 //*********************************************
 function updateGridTitle(caseData, selected) {
     const gridTitle = document.getElementById('grid-title');
+    const gridContent = document.getElementById('grid-content');
     
-    // Set default grid title text if no selection exists
+    // Set default grid titles text if no selection exists
     if (!selected) {
-        gridTitle.innerHTML = `<b>Case: </b> <em>No Case Selected</em><br>` +
-            `<b>Layer: </b> <em>No Layer Selected</em><br>` +
-            `<b>Location: </b> <em>No Location Selected</em>`;
+        gridTitle.innerHTML = ``; //show nothing
     } else {
-        // Set grid title with selected data
-        gridTitle.innerHTML = `<b>Case: </b> ${caseData.Case}<br>` +
-            `<b>Layer: </b> ${selected.Layer}<br>` +
-            `<b>Location: </b> ${selected.Location}`;
+        // show the titles
+        gridTitle.innerHTML = `<b>Case: </b><br>` +
+        `<b>Total Layers: </b><br>` +    
+        `<b>Part: </b><br>` +
+        `<b>Layer: </b><br>` +
+        `<b>Location: </b>`;
+        
+        // Set grid content with selected data
+        gridContent.innerHTML = ` ${caseData.Case}<br>` +
+            ` ${caseData.CaseLayers}<br>` +
+            ` ${selected.Part}<br>` +
+            ` ${selected.Layer}<br>` +
+            ` ${selected.Location}`;
     }
 }
+
 
 
 //Required on load to set defaults when nothing is selected.
