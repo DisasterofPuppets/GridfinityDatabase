@@ -46,12 +46,6 @@ function highlightGrid(layer, locations, occupiedLayers) {
         6: 'red'
     };
 
-    // Reset grid cells
-    document.querySelectorAll('#grid-body td').forEach(cell => {
-        cell.className = 'default';
-        cell.style.backgroundColor = cell.classList.contains('alternate') ? '#f5f5f5' : 'white';
-    });
-
     // Highlight only the cells corresponding to the occupied layers
     locations.split(',').forEach(location => {
         const letter = location.trim().charAt(0);

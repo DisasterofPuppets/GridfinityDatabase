@@ -386,6 +386,16 @@ header {
 		save:hover {
             background-color: #e6e6e6;
         }
+
+		#save-help-message {
+			color: #666;
+			font-size: 14px;
+			margin-top: 5px;
+			width: 100%;
+			text-align: center;
+		}
+
+
 		
 		.formwrapper {
 		display: flex;

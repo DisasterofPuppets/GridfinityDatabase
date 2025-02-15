@@ -205,15 +205,6 @@ body, html {
 			width: 100%;
 		}
 
-		.tablebox {
-			display: flex;
-			flex-direction: row;
-			align-items: flex-start;
-			justify-content: center;
-			box-sizing: border-box;
-			width: auto;
-			padding-left: 10px;
-		}
 
 /*Start Data-Table Headers*/
 
@@ -394,20 +385,17 @@ body, html {
 			font-family: Arial, sans-serif;
         }
 
-		
-		.grid-container {
-			display: inline-block;
-			height: auto;
-			box-sizing: border-box;
-			padding-right: 10px;
-        }
 
-		.layers {
-			display:inline-block;
-			box-sizing: border-box;	
-			padding: 0px;
-			margin-right: 10px;
+		.tablebox {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			box-sizing: border-box;
+			width: auto;
+			padding-left: 10px;
 		}
+
 
 /* Grid table styling */
 #grid-body table {
@@ -461,9 +449,20 @@ body, html {
     text-align: center;
 }
 
+.layers, .grid-container {
+	display:inline-block;
+	box-sizing: border-box;	
+	padding: 0px;
+	margin-right: 10px;
+}
+
+
 #layer-display {
+	display: flex;
     border-collapse: collapse; /* Ensures borders align properly */
     width: 100%; 
+	align-items: center;
+
 }
 
 
