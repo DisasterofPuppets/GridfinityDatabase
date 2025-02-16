@@ -298,13 +298,54 @@ header {
 
 		#whattocheck-wrapper {         
 			display: flex;
+			flex-direction: column;
 			justify-content: center;
+			align-items: center;
 		}
 
 
 		#whattocheck {         
 			display: none; 	/* Start with the check hidden */
-			text-align: left;
+			text-align: right;
+			}
+			
+		#whattocheck-title {         
+				display: none; 	/* Start with the check hidden */
+				text-align: right;
+				}
+
+		#whattocheck p{         
+
+			text-align: center;
+			color: orange;
+			font-size: 12px;
+		}
+
+		#whattocheck-title h3{         
+
+			text-align: center;
+			color: black;
+			line-height: .2;
+		}
+
+		.helptext, #whattocheck-title p {
+		
+			background-color: #f7f7f7;
+			padding: 10px;
+			font-style: italic;
+			font-size: 12px;
+			display: flex;
+			border: 1px, solid, orange;
+			box-sizing: border-box;
+			align-items: center;
+			justify-content: center;
+
+		}
+
+		.helptext img, #whattocheck-title img{
+			margin-left: 10px; /* Adjust the value as needed */
+			width: 50px;
+			height: 50px;
 		}
 
 
@@ -339,7 +380,8 @@ header {
 
         #fileName {
             font-size: 14px;
-            color: orange;
+			font-weight: bold;
+            font-style: italic;
             line-height: 1;                     /* Sets line height */
             display: none;
         }
@@ -350,14 +392,21 @@ header {
 /* OK link styles */
 		#okLink {
 			display: none; 						/* Hidden initially */
-			color: blue;
-			cursor: pointer;
 			margin-top: 10px;
 			align-items: center; 				/* Center the content horizontally */
+			cursor: pointer;
+			line-height: 1.5;
 		}
 
-		#okLink:hover {
+		#okLink a {
+			cursor: pointer;
+			text-decoration: none;
+			color: blue;
+		}
+
+		#okLink a:hover {
 			text-decoration: underline;
+			cursor: pointer;
 		}
 		
 		.excellent {

@@ -19,6 +19,7 @@ Now that's out of the way, Enjoy!
 // DOM elements
 const previewContainer = document.getElementById('preview');
 const checkContainer = document.getElementById('whattocheck');
+const whattoChecktitle = document.getElementById('whattocheck-title');
 const fileInput = document.getElementById('fileInput');
 const uploadFileButton = document.getElementById('uploadFileButton');
 const convertButton = document.getElementById('convertButton');
@@ -42,6 +43,7 @@ okLink.style.display = 'none'; // Hide okLink
 saveButton.style.display ='none'; // Hide Save button 
 checkContainer.style.display = 'none'; // Hide what to check 
 helpMessage.style.display = 'none'; // Hide help message 
+whattoChecktitle.style.display = 'none'; // Hide what to check title  
 
 let userDB = ''; // Global variable for userDB,  empty
 let uniqueCases = [];
@@ -228,6 +230,7 @@ uploadFileButton.addEventListener('click', () => {
     excellent.style.display = 'none';
     saveButton.style.display = 'none'; // Hide Save button
     checkContainer.style.display = 'none'; // Hide what to check
+    whattoChecktitle.style.display = 'none'; // Hide what to check title
 
     // Clear the unique cases section (clear case input fields)
     const uniqueCasesContainer = document.getElementById('uniqueCasesContainer');
@@ -282,6 +285,7 @@ function showError(message) {
     convertButton.style.display = 'none'; // Ensure convert button is hidden if there's an error
     saveButton.style.display ='none'; // Hide Save button 
     checkContainer.style.display = 'none'; // Hide what to check 
+    whattoChecktitle.style.display = 'none'; // Hide what to check title
 }
 
 // Handle valid file scenario
@@ -293,6 +297,7 @@ function handleValidFile() {
     okLink.style.display = 'none'; // Hide OK link 
     saveButton.style.display ='none'; // Hide Save button 
     checkContainer.style.display = 'none'; // Hide what to check 
+    whattoChecktitle.style.display = 'none'; // Hide what to check title
 }
 
 // Handle file input change event
@@ -339,6 +344,8 @@ convertButton.addEventListener('click', () => {
 
         countUniqueCases(); // Count unique cases after conversion
 
+        whattoChecktitle.style.display = 'block';
+        whattoChecktitle.innerHTML = includeCheckTitle();
         previewContainer.style.display = 'block';
         previewContainer.innerHTML = formatPreviewData(formattedData);
         checkContainer.style.display = 'block';
@@ -347,6 +354,7 @@ convertButton.addEventListener('click', () => {
  
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
+        okLink.innerHTML = `Once you are happy with the data,<br> <a href="#">CLICK ME</a>`;
 
         //Add what to check for in here
 
@@ -607,6 +615,7 @@ okLink.addEventListener('click', () => {
             previewContainer.style.display = 'none';
             okLink.style.display = 'none';
             checkContainer.style.display = 'none';
+            whattoChecktitle.style.display = 'none'; // Hide what to check title
             // Update excellent message
             excellent.innerHTML = "Excellent, let's setup your case dimensions";
             excellent.style.display = 'block';
@@ -625,6 +634,7 @@ okLink.addEventListener('click', () => {
                 previewContainer.style.display = 'none';
                 okLink.style.display = 'none';
                 checkContainer.style.display = 'none';
+                whattoChecktitle.style.display = 'none'; // Hide what to check title
        // Update excellent message
                 excellent.innerHTML = "Excellent, let's setup your case dimensions";
                 excellent.style.display = 'block';
@@ -754,6 +764,7 @@ function handleJSFile(content) {
         previewContainer.style.display = 'none';
         okLink.style.display = 'none';
         checkContainer.style.display = 'none';
+        whattoChecktitle.style.display = 'none'; // Hide what to check title
         
         // Show excellent message
         excellent.style.display = 'block';
@@ -876,6 +887,8 @@ function handleExcelData(jsonData) {
         // Hide convert button and show check and OK link
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
+        whattoChecktitle.style.display = 'block';
+        whattoChecktitle.innerHTML = includeCheckTitle();
         checkContainer.style.display = 'block';
         checkContainer.innerHTML = generateCheckContainerContent(uniqueCases.length);
 
@@ -925,6 +938,8 @@ function handleCSVFile(content) {
         // Hide convert button and show OK and check 
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
+        whattoChecktitle.style.display = 'block';
+        whattoChecktitle.innerHTML = includeCheckTitle();
         checkContainer.style.display = 'block';
         checkContainer.innerHTML = generateCheckContainerContent(uniqueCases.length);
 
@@ -937,7 +952,7 @@ function handleCSVFile(content) {
 
 
 //Formats and displays the What to check text
-
+/*
 function generateCheckContainerContent(uniqueCasesLength) {
     return `<h3 style="text-align: center;">Things to check</h3>
         <input type="checkbox"><b>Case:</b> <i>Is the case name correct?</i> 
@@ -947,8 +962,23 @@ function generateCheckContainerContent(uniqueCasesLength) {
         <br><input type="checkbox"><b>CaseLayers:</b><i>Are the total number of layers for this case correct?</i>    
         <br><input type="checkbox"><b>Total amount of cases: <em> ${uniqueCasesLength}</em></b><i> Is this the right amount of cases? </i>`;
 }
+*/
+
+function includeCheckTitle() {
+    return `<h3 style="text-align: center;">Checklist</h3>
+           <p align="center">Feel free to use the checkboxes to help, or don't...I'm not your mom. They don't do anything anyway 
+           <img src ="Images/Settings.png"></img></p>`
+}
 
 
+function generateCheckContainerContent(uniqueCasesLength) {
+    return `Are the <b><i>Case Names</b></i> correct?<input type="checkbox">
+        <br>Do the <b><i>Part Names </b></i>display correctly and belong in the case? <input type="checkbox">
+        <br>Are the <b><i>Layer Locations </i></b>correct?<input type="checkbox">
+        <br>Do the <b>Co-ordinates</b> start with a letter and end with a number? </i><input type="checkbox">
+        <br>Are the <i><b>Total Number of Layers</i></b> for this case correct? </i><input type="checkbox">
+        <br>Is this the right <i><b>Amount of Cases</i></b>? <b>(<em>${uniqueCasesLength}</em>)</b><input type="checkbox">`;
+}
 
 
 
