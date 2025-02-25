@@ -284,25 +284,16 @@ header {
 			white-space: nowrap;                 /* Prevents text from wrapping */
 			display: none; 						 /* Start with the preview hidden */
 			background-color: #f7f7f7; 		/* Light background for visibility */
-			padding: 10px;
 			text-align: left;
 			box-sizing: border-box;
 			overflow-x: auto;                    /* Controls horizontal scrolling */
 			overflow-y: auto;                    /* Allow vertical scrolling if needed */
-			width: auto;						 /* Ensure it takes the full width of the container */
+			width: 100%;						 /* Ensure it takes the full width of the container */
 			height: auto; 						 /* Adjust height based on content */
-			flex-grow: 1; 						 /* Allow the container to grow */
+			flex-grow: 1; 	
+			font-size: 14px;					 /* Allow the container to grow */
 		}
 /*END CODE PREVIEW*/		
-
-
-		#whattocheck-wrapper {         
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		}
-
 
 		#whattocheck {         
 			display: none; 	/* Start with the check hidden */
@@ -328,26 +319,53 @@ header {
 			line-height: .2;
 		}
 
-		.helptext, #whattocheck-title p {
-		
+		.helpwrapper { 
+			position: relative;
+			width: calc(200px + 150px); /* Image width + extra background space */
+			height: 50px !important; /* Fixed height */
 			background-color: #f7f7f7;
-			padding: 10px;
+			border: 1px solid orange;
+			border-radius: 10px;
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			align-items: center; /* Centers text vertically */
+			padding: 0 20px; /* Left padding remains */
+			box-sizing: border-box; /* Ensures padding does not increase overall width */
+
+		}
+		
+		.helptext {
 			font-style: italic;
 			font-size: 12px;
 			display: flex;
-			border: 1px, solid, orange;
 			box-sizing: border-box;
 			align-items: center;
 			justify-content: center;
-
+			text-align: center;
+			border-radius: 10px;
+			width: calc(100% - 50px);;
+	
 		}
-
-		.helptext img, #whattocheck-title img{
-			margin-left: 10px; /* Adjust the value as needed */
-			width: 50px;
-			height: 50px;
+		
+		.helpimg {
+			width: 150px;
+			height: 150px;
+			position: absolute;
+			right: 0;
+			top: 50%;
+			transform: translateY(-50%); 
+			background-image: url('Images/Exclaimation.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			pointer-events: none; 
 		}
-
+		
+		/* puts a bit of space between help bubble and block */
+		.checkcontainer {
+			padding-top: 50px;
+		}
 
 		convertButton {
             border-radius: 5px;                  /* Rounds corners of element */

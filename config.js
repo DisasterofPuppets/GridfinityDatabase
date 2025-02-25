@@ -343,18 +343,17 @@ convertButton.addEventListener('click', () => {
         userDB = generateUserDB(formattedData); // Set userDB after processing the data
 
         countUniqueCases(); // Count unique cases after conversion
-
-        whattoChecktitle.style.display = 'block';
-        whattoChecktitle.innerHTML = includeCheckTitle();
         previewContainer.style.display = 'block';
         previewContainer.innerHTML = formatPreviewData(formattedData);
+        whattoChecktitle.style.display = 'block';
+        whattoChecktitle.innerHTML = `<h3 style="text-align: center;">Checklist</h3>${CheckboxHelp()}`;
         checkContainer.style.display = 'block';
         checkContainer.innerHTML = generateCheckContainerContent(uniqueCases.length);
      
  
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
-        okLink.innerHTML = `Once you are happy with the data,<br> <a href="#">CLICK ME</a>`;
+        okLink.innerHTML = `<a href="#">Click here to confirm your data looks correct</a>`;
 
         //Add what to check for in here
 
@@ -888,7 +887,7 @@ function handleExcelData(jsonData) {
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
         whattoChecktitle.style.display = 'block';
-        whattoChecktitle.innerHTML = includeCheckTitle();
+        whattoChecktitle.innerHTML = `<h3 style="text-align: center;">Checklist</h3>${CheckboxHelp()}`;
         checkContainer.style.display = 'block';
         checkContainer.innerHTML = generateCheckContainerContent(uniqueCases.length);
 
@@ -939,7 +938,7 @@ function handleCSVFile(content) {
         convertButton.style.display = 'none';
         okLink.style.display = 'inline';
         whattoChecktitle.style.display = 'block';
-        whattoChecktitle.innerHTML = includeCheckTitle();
+        whattoChecktitle.innerHTML = `<h3 style="text-align: center;">Checklist</h3>${CheckboxHelp()}`;
         checkContainer.style.display = 'block';
         checkContainer.innerHTML = generateCheckContainerContent(uniqueCases.length);
 
@@ -951,33 +950,24 @@ function handleCSVFile(content) {
 
 
 
-//Formats and displays the What to check text
-/*
+// Function to generate the check container content
 function generateCheckContainerContent(uniqueCasesLength) {
-    return `<h3 style="text-align: center;">Things to check</h3>
-        <input type="checkbox"><b>Case:</b> <i>Is the case name correct?</i> 
-        <br><input type="checkbox"><b>Part:</b> Do the part names display correctly and belong in the case?</i>
-        <br><input type="checkbox"><b>Layer:</b>  <i>Are the layer locations correct?</i>
-        <br><input type="checkbox"><b>Location:</b><i>Do the co-ordinates start with a letter and end with a number?</i>
-        <br><input type="checkbox"><b>CaseLayers:</b><i>Are the total number of layers for this case correct?</i>    
-        <br><input type="checkbox"><b>Total amount of cases: <em> ${uniqueCasesLength}</em></b><i> Is this the right amount of cases? </i>`;
-}
-*/
-
-function includeCheckTitle() {
-    return `<h3 style="text-align: center;">Checklist</h3>
-           <p align="center">Feel free to use the checkboxes to help, or don't...I'm not your mom. They don't do anything anyway 
-           <img src ="Images/Settings.png"></img></p>`
-}
-
-
-function generateCheckContainerContent(uniqueCasesLength) {
-    return `Are the <b><i>Case Names</b></i> correct?<input type="checkbox">
+    return `<div id="checkcontainter" class="checkcontainer">Are the <b><i>Case Names</b></i> correct?<input type="checkbox">
         <br>Do the <b><i>Part Names </b></i>display correctly and belong in the case? <input type="checkbox">
         <br>Are the <b><i>Layer Locations </i></b>correct?<input type="checkbox">
         <br>Do the <b>Co-ordinates</b> start with a letter and end with a number? </i><input type="checkbox">
         <br>Are the <i><b>Total Number of Layers</i></b> for this case correct? </i><input type="checkbox">
-        <br>Is this the right <i><b>Amount of Cases</i></b>? <b>(<em>${uniqueCasesLength}</em>)</b><input type="checkbox">`;
+        <br>Is this the right <i><b>Amount of Cases</i></b>? <b>(<em>${uniqueCasesLength}</em>)</b><input type="checkbox"></div>`;
+}
+
+// Function to generate the self help content for checkboxes
+function CheckboxHelp() {
+    return `<div id="helpwrapper" class="helpwrapper">
+            <div id="helptext" class="helptext">Feel free to use the checkboxes to help, <br>or don't...I'm not your mom. They don't do anything anyway
+            </div>
+            <div id="helpimg" class="helpimg">
+            </div>
+            </div>`;
 }
 
 
