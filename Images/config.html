@@ -1,0 +1,156 @@
+<!--
+Gridfinity created by: Zack Freedman 
+https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman
+
+Gridfinity Database by: Disaster of Puppets 2025 
+http://disasterofpuppets.com 
+
+This code is free to use and modify, provided attribution is maintained.
+By using this code, you agree that:
+1. You will maintain attribution to original authors
+2. You accept all responsibility for any issues or damage that may arise from its use
+3. The authors accept no liability for any consequences of using this code
+
+Use at your own risk.
+
+Now that's out of the way, Enjoy!
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="config.css">
+    <title>Gridfinity Database Config</title>
+</head>
+<body>
+    <header>
+		<div class="padder"></div>
+		<div class="maintitle" classid="maintitle">
+			<span>Gridfinity Database Config</span>
+		</div>
+		<div class="index" classid="index">
+			<a href="index.html"></a>
+		</div>
+	</header>
+      
+<div class="content">
+            
+<!--Left Column-->			
+		<div class="left-column">
+
+			<div class="form">
+					<div class="form-title">
+						<h1>Convert your database</h1>
+					</div>
+					<div class="input">
+						<button id="uploadFileButton" title="Select a file to upload">Select your .csv, .xls, .xlsx, .js or file</button>
+						<input type="file" id="fileInput" accept=".xlsx, .xls, .csv, .js"/></input>
+						<span id="fileName">
+						</span>
+					</div>
+					
+					<div id="errorMessage" class="errorMessage">
+						<!-- error from Javascript will display -->
+					</div>
+					
+					<div class="convert-button">
+						<button id="convertButton">Convert</button>
+					</div>
+			</div>
+<!--End of fileUpload / form -->
+
+			<div class="preview-container">
+				
+<!-- Preview toggle button -->				
+
+
+						
+				
+<!-- Preview data -->													
+				<div id="preview" class="preview">
+				<!--preview content goes here-->
+				</div>
+				<!-- End preview data -->									
+
+
+				<div id="whattocheck-wrapper" class="whattocheck-wrapper">
+	<!-- what to check -->					
+					<div class="whattocheck-title" id="whattocheck-title">
+					</div>
+					<div id="whattocheck" class="whattocheck">
+					<!-- what to check goes here-->
+					</div>
+<!-- end what to check -->				
+				</div>
+
+				
+<!--ask user iseverything is ok-->
+				<div class="everythingok" id="everythingok">
+					<div id="okLink">
+					</div>			
+				</div>
+<!--end everything is ok-->
+</div>
+<!-- end of preview container-->
+
+<!--Start Form Wrapper-->
+<div class="formwrapper" id="formwrapper">
+			<!-- Excellent message, initially hidden -->
+			<div id="excellent">
+			</div>
+			<div id="uniqueCasesContainer">
+				<!-- the case config shows here-->
+			</div>
+<!--Save button -->
+			<div id="savebuttonwrapper" class="savebuttonwrapper">
+				<button id="save" class="save">Save to File</button>
+				
+				<div id="save-help-message" class="save-help-message">
+					<!--help message-->
+				</div>
+			</div>
+			
+</div>
+<!-- End of form wrapper-->
+			
+</div>
+<!--End of left-column -->
+	
+<!--Right Column-->
+ <div class="right-column">
+		
+<div class="case-container-wrapper"> <!-- for the scrollbar-->
+
+<!-- Case Container-->			
+		<div id="casecontainer" class="casecontainer">
+			
+				<!-- where the example cases are shown based on user input-->
+
+		
+		</div>
+<!-- End of Case Container-->
+
+</div>			
+<!--End of case wrapper-->
+  		
+
+</div>
+<!--End of right Column-->
+			
+</div>		
+<!-- End of content-->
+
+    <footer>
+        <div>
+            Gridfinity <a href="https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman" target="_blank">&nbsp;Zack Freedman</a>
+        </div>
+        <div>
+            Parts Database 2025 <a href="http://disasterofpuppets.com" target="_blank">&nbsp;Disaster of Puppets</a>
+        </div>
+    </footer>
+	<script type="text/javascript" src="config.js"></script>
+	<script type="text/javascript" src="xlsx.full.min.js"></script>
+</body>
+</html>

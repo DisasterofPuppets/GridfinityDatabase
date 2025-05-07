@@ -1,0 +1,120 @@
+<!--
+Gridfinity created by: Zack Freedman 
+https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman
+
+Gridfinity Database by: Disaster of Puppets 2025 
+http://disasterofpuppets.com 
+
+This code is free to use and modify, provided attribution is maintained.
+By using this code, you agree that:
+1. You will maintain attribution to original authors
+2. You accept all responsibility for any issues or damage that may arise from its use
+3. The authors accept no liability for any consequences of using this code
+
+Use at your own risk.
+
+Now that's out of the way, Enjoy!
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <title>Database Search and Highlight</title>
+</head>
+<body>
+    <header>
+        <div class="padder"></div>
+        <div class="maintitle" classid="maintitle">
+            <span>Gridfinity Parts Database</span>
+        </div>
+        <div class="config" classid="config">
+            <a href="config.html"></a>
+        </div>
+    </header>
+
+    <!-- Search Container -->
+    <div class="search-container">
+        <input type="text" id="search-box" class="search-box" placeholder="Filter">
+        <button id="clear-button" class="clear-button">Clear Filter</button>
+    </div>
+    <!-- End Search Container -->
+
+    <div class="content">
+
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="table-scroll">
+                <table id="data-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case</th>
+                            <th>Part</th>
+                            <th>Layer</th>
+                            <th>Location</th>
+                            <th style="display:none;">Image</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="right-align">
+
+                <!-- Preview Image -->
+                <div id="image-preview" class="image-preview">
+                    <span>Part Preview</span>
+                </div>
+
+                <!-- Selected Info Box -->
+                <div id="selectedinfo" class="selectedinfo">
+                    <div class="grid-info-wrapper">
+                        <div id="grid-title" class="grid-title"></div>
+                        <div id="grid-content" class="grid-content"></div>
+                        <div id="grid-notes" class="grid-notes"></div>
+                    </div>
+                </div>
+
+                <!-- Table Box (layers + grid) -->
+                <div id="tablebox" class="tablebox">
+
+                    <!-- Layer Column -->
+                    <div class="layers" id="layers"></div>
+
+                    <!-- Grid Container -->
+                    <div id="grid-container" class="grid-container">
+                        <table id="grid">
+                            <tbody id="grid-body">
+                                <!-- Grid cells will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End of Grid Container -->
+
+                </div> <!-- End of Tablebox -->
+
+            </div> <!-- ✅ End of RightAlign -->
+        </div> <!-- End of Right Column -->
+
+    </div> <!-- End of Content -->
+
+    <footer>
+        <div>
+            Gridfinity <a href="https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman" target="_blank"> Zack Freedman</a>
+        </div>
+        <div>
+            Parts Database 2025 <a href="http://disasterofpuppets.com" target="_blank"> Disaster of Puppets</a>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="user.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</body>
+</html>

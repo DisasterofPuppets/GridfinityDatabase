@@ -1,0 +1,561 @@
+	/* 
+Gridfinity created by: Zack Freedman 
+https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman
+
+Gridfinity Database by: Disaster of Puppets 2025 
+http://disasterofpuppets.com 
+
+This code is free to use and modify, provided attribution is maintained.
+By using this code, you agree that:
+1. You will maintain attribution to original authors
+2. You accept all responsibility for any issues or damage that may arise from its use
+3. The authors accept no liability for any consequences of using this code
+
+Use at your own risk.
+
+Now that's out of the way, Enjoy!
+*/
+
+
+body, html {
+            font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+            min-height: 100vh;
+            background-color: white; /* Fallback color */
+			display: flex;
+			flex-direction: column;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+        }
+
+			body.background-enabled {
+				background-image: url('Images/Pattern1.png');
+				background-size: 300px 300px;
+				background-repeat: repeat;
+				background-position: center;
+				background-attachment: fixed;
+			}
+
+
+        header {
+            height: 40px;
+			display: flex;
+            position: fixed; /* Fix header at the top */
+			background-color: #333;
+            color: white;
+			flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 16px;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+        }
+
+		.maintitle {
+			flex-grow: 1;
+			text-align: center;
+		}
+
+
+		.padder {
+			width: 5px;  /* Adjust size as needed */
+			background-color: #333;
+			height: 40px;
+		}
+
+		.padder a {
+			transition: all 0.2s ease;
+			background-color: #4e4d4d;
+		}
+
+		.padder:hover {
+			width: 5px;  /* Adjust size as needed */
+			background-color: #4e4d4d;
+			height: 40px;
+		}
+
+		.config {
+			text-align: right;
+			padding-right: 10px;
+			display: flex;
+			align-items: center;
+			height: 100%;
+		}
+		
+		.config a {
+			display: block;
+			width: 24px;  
+			height: 24px; 
+			background-image: url('Images/Settings.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			transition: all 0.2s ease;
+		}
+		
+		.config a:hover {
+			background-image: url('Images/Settings-Hover.png');
+		}
+
+        footer {
+            height: 40px;
+            background-color: #333;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            font-size: 10px;
+            position: fixed;
+			padding-right: 20px;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+			font-family: Arial, sans-serif;
+	        }
+
+        footer a {
+            color: #4da8da;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .search-container {
+			height: 85px;
+            display: flex;
+            padding: 10px;
+			padding-top: 55px;
+			justify-content: center;
+			align-items: center; /* Ensures Vertical Alignment */
+			gap: 10px;
+			width: auto;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */	
+			overflow-y: hidden;
+        }
+		
+        .search-box {
+			width: 25%;
+            font-size: 14px;
+			gap: 10px;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+        }
+		
+		clear-button {
+            padding: 8px;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+        }		
+		
+
+/* This is the middle row, holds the parts db, image preview and grid db */
+
+			.content {
+				display: flex; /* Flexbox layout */
+				align-items: flex-start; /* Y positioning when a flex is set to row (if not set, row is default) */
+				justify-content: center; /* Horizontal alignment */
+				box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+				overflow: hidden;
+				width: 100%;
+				gap: 20px;
+				flex-grow: 1;
+			}
+
+		.left-column {
+			display: flex;
+			flex-direction: column;
+			height: calc(100vh - 160px); 
+			box-sizing: border-box;
+			overflow-y: auto;
+			padding-right: 40px;
+			align-items: center; /*when flex is a column, this becomes the horizontal alignment*/
+			justify-content: center; /* When flex is a column, this becomes the vertical alignment*/
+			width: auto;			
+		}		
+		
+		.right-column {
+			display: flex;
+			flex-wrap: wrap;      
+			height: calc(100vh - 160px); 
+			box-sizing: border-box;
+			padding-left: 40px;
+			align-items: flex-start;
+			justify-content: flex-start;
+			width: auto;
+			overflow: auto;
+		}	
+		
+		#data-table {
+			width: auto;
+			border-collapse: separate;
+			table-layout: auto;
+			border-spacing: 0;
+			padding: 10px;
+			box-sizing: border-box;
+					
+		}
+		
+		.table-scroll  {
+			overflow-y: auto;
+			overflow-x: hidden;
+			width: 100%;
+		}
+
+
+/*Start Data-Table Headers*/
+
+
+	#data-table th {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		background-color: #333; /* Solid background to prevent bleed-through */
+		color: white;
+		border: 1px solid black; /* Consistent black border */
+		padding: 8px 30px;
+		text-align: center;
+		white-space: nowrap;
+		box-sizing: border-box;
+	}
+
+		#data-table th.sort-asc::after {
+			content: '▲';
+			position: absolute;
+			right: 10px;
+			color: #555;
+		}
+
+		#data-table th.sort-desc::after {
+			content: '▼';
+			position: absolute;
+			right: 10px;
+			color: #555;
+		}
+
+		/* Highlight the active column */
+		#data-table th.active-sort {
+			background-color: #f0f0f0;
+			font-weight: bold;
+			color: #333;
+		}
+		
+		/* Ensure icons are hidden by default */
+		#data-table  th .sort-icon {
+			visibility: hidden;
+			margin-left: 5px; /* Optional, space between text and icon */
+		}
+
+		/* Show icons only when hovering over the header */
+		#data-table  th:hover .sort-icon {
+			visibility: visible;
+		}
+
+		/* Keep the icon visible for the currently sorted column */
+		#data-table  th.sorted .sort-icon {
+			visibility: visible;
+		}
+		
+		/* Adjust hover effect for header */
+		#data-table th:hover {
+			background-color: #a0a0a0; /* Slightly darker gray */
+			color: black;  /* Change text color on hover for better contrast */
+		}		
+
+/*End of Data-Table Headers*/
+		
+/*Data-Table Row*/		
+
+	/* Row color for odd and even rows */
+#data-table tr:nth-child(odd) {
+    background-color: white;
+}
+
+#table-body tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Hover effect for non-selected rows */
+#table-body tr:hover {
+    background-color: #d6d6d6 !important;
+}
+
+/* Keep the selected row with a consistent background */
+#table-body tr.selected {
+    background-color: #a0a0a0 !important; /* Ensure the selected row has a constant background */
+}
+
+/* Ensure the selected row remains the same color when hovered */
+#table-body tr.selected:hover {
+    background-color: #a0a0a0 !important; /* Keep the selection even when hovered */
+}
+
+/* Hover effect for non-selected rows */
+#table-body tr:not(.selected):hover {
+    background-color: #d6d6d6 !important; /* Hover effect for non-selected rows */
+}
+
+		
+
+		
+/*End Data-Table Row*/				
+
+/*Data-Table Table Data*/	
+
+		#data-table td {
+			padding: 8px 30px; /* top, right, bottom, left so the arrows pass the text*/
+			text-align: center;
+			border: 1px solid #ddd;
+			white-space: nowrap; /* Prevent overly stretched columns */
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */	
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}		
+
+
+/*End Data-Table Table Data*/	
+
+/*Data-Table Table Body*/	
+
+		/* hover effect to rows */
+		#data-table tbody tr:hover {
+			background-color: #f0f0f0; /* Light gray background on row hover */
+		}
+/*End Data-Table Table Body*/	
+
+		
+		.right-align {
+			height: auto;
+			display: flex;
+			overflow-y: hidden;
+			flex-direction: column;
+			justify-content: flex-end;
+			align-items: center;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+			width: 100%;
+		}
+		
+        .image-preview {
+            display: flex;
+			background-color: #f4f4f4;
+            padding: 10px;
+			justify-content: center;
+			align-items: center;
+         	box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+            height: 220px;
+            width: 220px;
+        }
+
+		.selectedinfo{
+			display: flex;
+			flex-direction: row;
+			box-sizing: border-box;  /* Ensure padding and borders are included in the width */
+			width: auto;
+			height: auto;
+			padding: 10px;
+			gap: 5px;
+			justify-content: center;
+		}
+
+        .grid-title {
+			text-align: right;	
+			box-sizing: border-box;
+			line-height: 1.5;
+			width: auto;
+			font-family: Arial, sans-serif;
+        }
+
+		.gridcontentalign {
+			text-align: left;	
+			box-sizing: border-box;
+			line-height: 1.5;
+			width: auto;
+			font-family: Arial, sans-serif;
+        }
+
+
+        .grid-content {
+			text-align: left;	
+			box-sizing: border-box;
+			line-height: 1.5;
+			width: auto;
+			font-family: Arial, sans-serif;
+        }
+
+
+		.tablebox {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			box-sizing: border-box;
+			width: auto;
+			padding-left: 10px;
+		}
+
+
+/* Grid table styling */
+#grid-body table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+#grid-body table td {
+    width: 15px !important;
+    height: 15px !important;
+    min-width: 15px !important;
+    min-height: 15px !important;
+    max-width: 15px !important;
+    max-height: 15px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1px solid #ccc;
+}
+
+#grid-body table td.default {
+    background-color: white;
+}
+
+#grid-body table td.alternate {
+    background-color: #f5f5f5;  /* Light gray for alternate cells */
+}
+
+.grid-info-wrapper {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 6px 20px;
+    justify-content: center;
+    align-items: start;
+    margin-top: 10px;
+}
+
+#grid-title {
+    text-align: right;
+    line-height: 1.5;
+}
+
+#grid-content {
+    text-align: left;
+    line-height: 1.5;
+}
+
+#grid-notes {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.notes-text {
+    font-size: 0.85em;
+    color: #333;
+    font-style: italic;
+    background-color: #f2f2f2;
+    padding: 6px 10px;
+    border-radius: 4px;
+    max-width: 220px;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.notes-text .notes-label {
+    display: block;
+    font-style: normal;
+    margin-bottom: 4px;
+}
+
+.notes-icon {
+    font-size: 0.9em;
+    margin-left: 8px;
+    cursor: help;
+}
+
+.notes-icon-img {
+    height: 14px;
+    width: 14px;
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+}
+
+#grid-body table th {
+    padding: 0;
+    font-size: 8px;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    width: 15px;
+    margin: 0;
+}
+
+#grid-body table th.alternate {
+    color: #666;  /* Darker text for alternate headers */
+}
+
+/* Style for column headers (letters) */
+#grid-body table tr:first-child th {
+    vertical-align: bottom;
+    height: 12px;
+}
+
+/* Style for row headers (numbers) */
+#grid-body table tr th:first-child {
+    padding: 0;
+    text-align: center;
+}
+
+.layers, .grid-container {
+	display:inline-block;
+	box-sizing: border-box;	
+	padding: 0px;
+	margin-right: 10px;
+}
+
+
+#layer-display {
+	display: flex;
+    border-collapse: collapse; /* Ensures borders align properly */
+    width: 100%; 
+	align-items: center;
+
+}
+
+
+/* Ensure all layers' table cells have consistent styling */
+#layer-display table {
+    border-collapse: collapse;
+	margin: 20px;
+	font-size: 8px !important;
+	font-weight: bold !important;
+}
+
+#layer-display td, #layer-display th {
+    width: 15px; /* Forces all cells to be 10px wide */
+    height: 15px; /* Keeps it uniform */
+    text-align: center;
+	min-width: 15px !important; 
+    max-width: 15px !important;
+    min-height: 15px !important;
+    max-height: 15px !important;
+    border: 1px solid black; /* Ensures visibility */
+    padding: 0; /* Removes spacing */
+    overflow: hidden;
+	font-size: 8px !important;
+	font-weight: bold !important;
+}
+/*removes border from the top row of the layer display*/
+#layer-display tr:first-child th {
+	font-size: 8px !important;
+	font-weight: bold !important;
+    border-top: none !important;
+	border-left: none !important;	
+	border-right: none !important;	
+    border-bottom: 1px solid black; /* Ensures bottom borders remain */
+}
+#layer-display td {
+	font-size: 8px !important;
+	font-weight: bold !important;
+}
