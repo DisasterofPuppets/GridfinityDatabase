@@ -423,6 +423,64 @@ body, html {
     background-color: #f5f5f5;  /* Light gray for alternate cells */
 }
 
+.grid-info-wrapper {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 6px 20px;
+    justify-content: center;
+    align-items: start;
+    margin-top: 10px;
+}
+
+#grid-title {
+    text-align: right;
+    line-height: 1.5;
+}
+
+#grid-content {
+    text-align: left;
+    line-height: 1.5;
+}
+
+#grid-notes {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.notes-text {
+    font-size: 0.85em;
+    color: #333;
+    font-style: italic;
+    background-color: #f2f2f2;
+    padding: 6px 10px;
+    border-radius: 4px;
+    max-width: 220px;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+.notes-text .notes-label {
+    display: block;
+    font-style: normal;
+    margin-bottom: 4px;
+}
+
+.notes-icon {
+    font-size: 0.9em;
+    margin-left: 8px;
+    cursor: help;
+}
+
+.notes-icon-img {
+    height: 14px;
+    width: 14px;
+    margin-left: 6px;
+    cursor: help;
+    vertical-align: middle;
+}
+
 #grid-body table th {
     padding: 0;
     font-size: 8px;

@@ -21,129 +21,100 @@ Now that's out of the way, Enjoy!
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="main.css">
     <title>Database Search and Highlight</title>
 </head>
 <body>
     <header>
-		<div class="padder"></div>
-		<div class="maintitle" classid="maintitle">
-			<span>Gridfinity Parts Database</span>
-		</div>
-		<div class="config" classid="config">
-			<a href="config.html"></a>
-		</div>
-	</header>
-      
+        <div class="padder"></div>
+        <div class="maintitle" classid="maintitle">
+            <span>Gridfinity Parts Database</span>
+        </div>
+        <div class="config" classid="config">
+            <a href="config.html"></a>
+        </div>
+    </header>
 
-<!-- Search Container -->		
-		<div class="search-container">
+    <!-- Search Container -->
+    <div class="search-container">
+        <input type="text" id="search-box" class="search-box" placeholder="Filter">
+        <button id="clear-button" class="clear-button">Clear Filter</button>
+    </div>
+    <!-- End Search Container -->
 
-			<input type="text" id="search-box" class="search-box" placeholder="Filter">
-			<button id="clear-button" class="clear-button">Clear Filter</button>
-		
-		</div>
-<!-- End Search Container -->
+    <div class="content">
 
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="table-scroll">
+                <table id="data-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Case</th>
+                            <th>Part</th>
+                            <th>Layer</th>
+                            <th>Location</th>
+                            <th style="display:none;">Image</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-
-<div class="content">
-            
-<!--Left Column-->			
-		<div class="left-column">
-			<div class="table-scroll">
-				<table id="data-table" class="data-table">
-					<thead>
-						<tr>
-							<th>Case</th>
-							<th>Part</th>
-							<th>Layer</th>
-							<th>Location</th>
-							<th style="display:none;">Image</th>
-						</tr>
-					</thead>
-					<tbody id="table-body">
-						<!-- Rows will be dynamically added here -->
-					</tbody>
-				</table>
-			</div>
-		</div>
-            
-<!--Right Column-->
+        <!-- Right Column -->
         <div class="right-column">
-		
-<!-- one box to move them all-->
-				<div class="right-align">		
-				
-							<!--Preview Image-->
-					<div id="image-preview" class="image-preview">
-						<span>Part Preview</span>
-					</div>
+            <div class="right-align">
 
+                <!-- Preview Image -->
+                <div id="image-preview" class="image-preview">
+                    <span>Part Preview</span>
+                </div>
 
-<!-- Selected info holder box-->
-					<div id="selectedinfo" class="selectedinfo">
+                <!-- Selected Info Box -->
+                <div id="selectedinfo" class="selectedinfo">
+                    <div class="grid-info-wrapper">
+                        <div id="grid-title" class="grid-title"></div>
+                        <div id="grid-content" class="grid-content"></div>
+                        <div id="grid-notes" class="grid-notes"></div>
+                    </div>
+                </div>
 
-<!-- Title for Grid Table -->
-						<div id="grid-title" class="grid-title">
-						</div>
-						<div id="gridcontentalign" class="gridcontentalign">
-								<div id="grid-content" class="grid-content">
-								</div>
-							</div>
-					</div>
-<!-- ENDSelected selectedinfox-->
+                <!-- Table Box (layers + grid) -->
+                <div id="tablebox" class="tablebox">
 
+                    <!-- Layer Column -->
+                    <div class="layers" id="layers"></div>
 
-<!-- Table box -->
-					<div id="tablebox" class="tablebox">
+                    <!-- Grid Container -->
+                    <div id="grid-container" class="grid-container">
+                        <table id="grid">
+                            <tbody id="grid-body">
+                                <!-- Grid cells will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End of Grid Container -->
 
+                </div> <!-- End of Tablebox -->
 
-<!--Layer Column-->			
-					<div class="layers" id="layers">
+            </div> <!-- ✅ End of RightAlign -->
+        </div> <!-- End of Right Column -->
 
-					</div>
-<!-- End of Layer Column-->			
-
-
-<!-- Grid Table Container-->
-					<div id="grid-container" class="grid-container">
-            
-<!-- Grid Table-->
-						<table id="grid">
-							<tbody id="grid-body">
-							</tbody>
-						</table>
-					
-					</div>
-<!-- End of Grid Container-->
-            
-			
-
-			
-					</div>
-<!-- End of Table box -->
-
-				</div>			
-<!-- End of RightAlign -->		
-			
-		</div>
-<!--End of right Column-->
-			
-			
-	</div>
-<!--end of content div-->
-		
+    </div> <!-- End of Content -->
 
     <footer>
         <div>
-            Gridfinity <a href="https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman" target="_blank">&nbsp;Zack Freedman</a>
+            Gridfinity <a href="https://www.youtube.com/watch?v=ra_9zU-mnl8&t=1s&ab_channel=ZackFreedman" target="_blank"> Zack Freedman</a>
         </div>
         <div>
-            Parts Database 2025 <a href="http://disasterofpuppets.com" target="_blank">&nbsp;Disaster of Puppets</a>
+            Parts Database 2025 <a href="http://disasterofpuppets.com" target="_blank"> Disaster of Puppets</a>
         </div>
     </footer>
-	<script type="text/javascript" src="user.js"></script>
-	<script type="text/javascript" src="main.js"></script>
+
+    <script type="text/javascript" src="user.js"></script>
+    <script type="text/javascript" src="main.js"></script>
 </body>
 </html>

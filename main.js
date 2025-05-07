@@ -46,21 +46,51 @@ function highlightGrid(layer, locations, occupiedLayers) {
         6: 'red'
     };
 
-    // Highlight only the cells corresponding to the occupied layers
-    locations.split(',').forEach(location => {
-        const letter = location.trim().charAt(0);
-        const number = parseInt(location.trim().substring(1));
-        const rowIndex = number + 1;
-        const colIndex = letter.charCodeAt(0) - 64 + 1;
+    const segments = locations.split(',').map(loc => loc.trim().toUpperCase());
 
-        occupiedLayers.forEach(layerNum => {
-            const cell = document.querySelector(`#grid-body tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`);
-            if (cell && layerNum === layer) {
-                cell.style.backgroundColor = layerColors[layerNum];
+    segments.forEach(segment => {
+        if (segment.includes('-')) {
+            // Treat as rectangular range: D2-I5
+            const [start, end] = segment.split('-');
+            if (!start || !end) return;
+
+            const startCol = start.charCodeAt(0);
+            const startRow = parseInt(start.slice(1));
+            const endCol = end.charCodeAt(0);
+            const endRow = parseInt(end.slice(1));
+
+            for (let col = Math.min(startCol, endCol); col <= Math.max(startCol, endCol); col++) {
+                for (let row = Math.min(startRow, endRow); row <= Math.max(startRow, endRow); row++) {
+                    const rowIndex = row + 1;
+                    const colIndex = col - 64 + 1;
+
+                    occupiedLayers.forEach(layerNum => {
+                        const cell = document.querySelector(`#grid-body tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`);
+                        if (cell && layerNum === layer) {
+                            cell.style.backgroundColor = layerColors[layerNum];
+                        }
+                    });
+                }
             }
-        });
+        } else {
+            // Individual cell
+            const col = segment.charCodeAt(0);
+            const row = parseInt(segment.slice(1));
+            const rowIndex = row + 1;
+            const colIndex = col - 64 + 1;
+
+            occupiedLayers.forEach(layerNum => {
+                const cell = document.querySelector(`#grid-body tr:nth-child(${rowIndex}) td:nth-child(${colIndex})`);
+                if (cell && layerNum === layer) {
+                    cell.style.backgroundColor = layerColors[layerNum];
+                }
+            });
+        }
     });
 }
+
+
+
 
 //*********************************************
 // RENDERTABLE renders part table
@@ -80,7 +110,10 @@ function renderTable(data) {
         tableBody.innerHTML = data.map((item, index) => `
             <tr onclick="selectRow(${index}, ${JSON.stringify(item).replace(/"/g, '&quot;')})">
                 <td>${item.Case}</td>
-                <td>${item.Part}</td>
+                <td style="display: flex; justify-content: space-between; align-items: center;">
+                <span>${item.Part}</span>
+                    ${item.Notes ? `<img src="Images/Note.png" alt="Notes" title="${item.Notes.replace(/"/g, '&quot;')}" class="notes-icon-img">` : ""}
+                </td>
                 <td>${item.Layer}</td>
                 <td>${item.Location}</td>
                 <td style="display:none;">${item.CaseLayers}</td>
@@ -149,29 +182,38 @@ function showLayers(layers = 2, occupiedLayers = []) {
 //*********************************************
 // UPDATEGRIDTITLE sets the grid title
 //*********************************************
+
 function updateGridTitle(caseData, selected) {
     const gridTitle = document.getElementById('grid-title');
     const gridContent = document.getElementById('grid-content');
-    
-    // Set default grid titles text if no selection exists
+    const gridNotes = document.getElementById('grid-notes');
+
     if (!selected) {
-        gridTitle.innerHTML = ``; //show nothing
+        gridTitle.innerHTML = ``;
+        gridContent.innerHTML = ``;
+        gridNotes.innerHTML = ``;
     } else {
-        // show the titles
-        gridTitle.innerHTML = `<b>Case: </b><br>` +
-        `<b>Total Layers: </b><br>` +    
-        `<b>Part: </b><br>` +
-        `<b>Layer: </b><br>` +
-        `<b>Location: </b>`;
-        
-        // Set grid content with selected data
-        gridContent.innerHTML = ` ${caseData.Case}<br>` +
-            ` ${caseData.CaseLayers}<br>` +
-            ` ${selected.Part}<br>` +
-            ` ${selected.Layer}<br>` +
-            ` ${selected.Location}`;
+        gridTitle.innerHTML =
+            `<b>Case:</b><br>` +
+            `<b>Total Layers:</b><br>` +
+            `<b>Part:</b><br>` +
+            `<b>Layer:</b><br>` +
+            `<b>Location:</b>`;
+
+        gridContent.innerHTML =
+            `${caseData.Case}<br>` +
+            `${caseData.CaseLayers}<br>` +
+            `${selected.Part}<br>` +
+            `${selected.Layer}<br>` +
+            `${selected.Location}`;
+
+            gridNotes.innerHTML = selected.Notes
+            ? `<span class="notes-text"><b class="notes-label">Notes:</b> ${selected.Notes}</span>`
+            : '';
     }
 }
+
+
 
 
 
@@ -547,3 +589,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
